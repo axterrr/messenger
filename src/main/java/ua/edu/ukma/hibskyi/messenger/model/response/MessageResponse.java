@@ -19,7 +19,7 @@ public class MessageResponse {
 
     private LocalDateTime sentAt;
 
-    private ChatResponse chat;
+//    private ChatResponse chat;
 
-    private UserResponse sender;
+//    private UserResponse sender;
 }

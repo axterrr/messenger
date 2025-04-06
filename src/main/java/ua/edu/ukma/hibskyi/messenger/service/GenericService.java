@@ -1,8 +1,15 @@
 package ua.edu.ukma.hibskyi.messenger.service;
 
-public interface GenericService<E, I> {
-    E getById(I id);
-    I create(E entity);
-    void update(I id, E entity);
+import java.util.List;
+
+public interface GenericService<V, R, I> {
+    List<R> getAll();
+
+    R getById(I id);
+
+    I create(V view);
+
+    void update(I id, V view);
+
     void deleteById(I id);
 }
