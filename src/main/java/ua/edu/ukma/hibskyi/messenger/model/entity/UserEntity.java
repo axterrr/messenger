@@ -19,7 +19,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @Builder
@@ -27,12 +26,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class UserEntity {
+public class UserEntity implements Identifiable<String> {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private String id;
 
     @Column(name = "phone", unique = true, nullable = false)
     private String phone;

@@ -10,8 +10,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 // TODO:
 //  - make email nullable and add username
-//  - change UUID to other type
-//  - make BaseService
 
 
 @SpringBootApplication

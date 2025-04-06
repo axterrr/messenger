@@ -1,4 +1,4 @@
-package ua.edu.ukma.hibskyi.messenger.model.mapper;
+package ua.edu.ukma.hibskyi.messenger.mapper;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -7,11 +7,9 @@ import ua.edu.ukma.hibskyi.messenger.model.entity.UserEntity;
 import ua.edu.ukma.hibskyi.messenger.model.response.ChatResponse;
 import ua.edu.ukma.hibskyi.messenger.model.view.ChatView;
 
-import java.util.UUID;
-
 @Component
 @AllArgsConstructor
-public class ChatMapper extends AbstractMapper<ChatView, ChatResponse, ChatEntity> {
+public class ChatMapper extends BaseMapperImpl<ChatEntity, ChatView, ChatResponse> {
 
 //    private MessageMapper messageMapper;
 //    private UserMapper userMapper;
@@ -23,7 +21,7 @@ public class ChatMapper extends AbstractMapper<ChatView, ChatResponse, ChatEntit
             .users(view.getUsersIds()
                 .stream()
                 .map(id -> UserEntity.builder()
-                    .id(UUID.fromString(id)).build())
+                    .id(id).build())
                     .toList())
             .build();
     }
@@ -31,7 +29,7 @@ public class ChatMapper extends AbstractMapper<ChatView, ChatResponse, ChatEntit
     @Override
     public ChatResponse mapToResponse(ChatEntity entity) {
         return ChatResponse.builder()
-            .id(entity.getId().toString())
+            .id(entity.getId())
             .name(entity.getName())
 //            .messages(entity.getMessages().stream()
 //                .map(messageMapper::mapToResponse)

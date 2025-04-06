@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
 @Builder
@@ -25,12 +24,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "message")
-public class MessageEntity {
+public class MessageEntity implements Identifiable<String> {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private String id;
 
     @Column(name = "content", nullable = false)
     private String content;

@@ -1,4 +1,4 @@
-package ua.edu.ukma.hibskyi.messenger.model.mapper;
+package ua.edu.ukma.hibskyi.messenger.mapper;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -8,7 +8,7 @@ import ua.edu.ukma.hibskyi.messenger.model.view.UserView;
 
 @Component
 @AllArgsConstructor
-public class UserMapper extends AbstractMapper<UserView, UserResponse, UserEntity> {
+public class UserMapper extends BaseMapperImpl<UserEntity, UserView, UserResponse> {
 
 //    private ChatMapper chatMapper;
 
@@ -25,7 +25,7 @@ public class UserMapper extends AbstractMapper<UserView, UserResponse, UserEntit
     @Override
     public UserResponse mapToResponse(UserEntity entity) {
         return UserResponse.builder()
-            .id(entity.getId().toString())
+            .id(entity.getId())
             .phone(entity.getPhone())
             .email(entity.getEmail())
             .name(entity.getName())

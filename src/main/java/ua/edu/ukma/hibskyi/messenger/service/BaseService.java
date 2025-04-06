@@ -2,7 +2,7 @@ package ua.edu.ukma.hibskyi.messenger.service;
 
 import java.util.List;
 
-public interface GenericService<V, R, I> {
+public interface BaseService<V, R, I> {
     List<R> getAll();
 
     R getById(I id);
