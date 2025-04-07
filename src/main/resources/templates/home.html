@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Messenger</title>
+</head>
+<body>
+<h1>Choose a chat to start communication</h1>
+<ul>
+    <li th:each="user : ${users}" th:text="${user.name}"></li>
+</ul>
+</body>
+</html>
