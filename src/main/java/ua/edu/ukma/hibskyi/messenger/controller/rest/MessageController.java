@@ -1,6 +1,5 @@
 package ua.edu.ukma.hibskyi.messenger.controller.rest;
 
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ua.edu.ukma.hibskyi.messenger.model.response.MessageResponse;
-import ua.edu.ukma.hibskyi.messenger.model.view.MessageView;
+import ua.edu.ukma.hibskyi.messenger.dto.response.MessageResponse;
+import ua.edu.ukma.hibskyi.messenger.dto.view.MessageView;
 import ua.edu.ukma.hibskyi.messenger.service.MessageService;
 
 import java.util.List;
@@ -36,12 +35,12 @@ public class MessageController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createMessage(@Valid @RequestBody MessageView message) {
+    public ResponseEntity<String> createMessage(@RequestBody MessageView message) {
         return new ResponseEntity<>(messageService.create(message), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> updateMessage(@PathVariable String id, @Valid @RequestBody MessageView message) {
+    public ResponseEntity<HttpStatus> updateMessage(@PathVariable String id, @RequestBody MessageView message) {
         messageService.update(id, message);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

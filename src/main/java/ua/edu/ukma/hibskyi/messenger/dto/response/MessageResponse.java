@@ -1,4 +1,4 @@
-package ua.edu.ukma.hibskyi.messenger.model.response;
+package ua.edu.ukma.hibskyi.messenger.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

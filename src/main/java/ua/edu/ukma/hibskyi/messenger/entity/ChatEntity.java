@@ -1,4 +1,4 @@
-package ua.edu.ukma.hibskyi.messenger.model.entity;
+package ua.edu.ukma.hibskyi.messenger.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -11,6 +11,9 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,38 +28,32 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users")
-public class UserEntity implements Identifiable<String> {
+@Table(name = "chat")
+public class ChatEntity implements Identifiable<String> {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "phone", unique = true, nullable = false)
-    private String phone;
-
-    @Column(name = "email", unique = true, nullable = false)
-    private String email;
-
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
+    @Size(max = 30, message = "Chat name is too large")
+    @NotBlank(message = "Chat name cannot be blank")
     private String name;
 
-    @Column(name = "description")
-    private String description;
+    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<MessageEntity> messages;
 
     @ManyToMany
     @JoinTable(
         name = "users_chats",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "chat_id")
+        joinColumns = @JoinColumn(name = "chat_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
     )
+    @NotEmpty(message = "Chat must contain at least 1 user")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<ChatEntity> chats;
-
-    @OneToMany(mappedBy = "sender", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private List<MessageEntity> messages;
+    private List<UserEntity> users;
 }

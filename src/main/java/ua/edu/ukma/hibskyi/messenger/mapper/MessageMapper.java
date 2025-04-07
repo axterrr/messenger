@@ -2,11 +2,11 @@ package ua.edu.ukma.hibskyi.messenger.mapper;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import ua.edu.ukma.hibskyi.messenger.model.entity.ChatEntity;
-import ua.edu.ukma.hibskyi.messenger.model.entity.MessageEntity;
-import ua.edu.ukma.hibskyi.messenger.model.entity.UserEntity;
-import ua.edu.ukma.hibskyi.messenger.model.response.MessageResponse;
-import ua.edu.ukma.hibskyi.messenger.model.view.MessageView;
+import ua.edu.ukma.hibskyi.messenger.entity.ChatEntity;
+import ua.edu.ukma.hibskyi.messenger.entity.MessageEntity;
+import ua.edu.ukma.hibskyi.messenger.entity.UserEntity;
+import ua.edu.ukma.hibskyi.messenger.dto.response.MessageResponse;
+import ua.edu.ukma.hibskyi.messenger.dto.view.MessageView;
 
 @Component
 @AllArgsConstructor

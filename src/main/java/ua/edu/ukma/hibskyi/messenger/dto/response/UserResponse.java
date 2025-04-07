@@ -1,4 +1,4 @@
-package ua.edu.ukma.hibskyi.messenger.model.response;
+package ua.edu.ukma.hibskyi.messenger.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,13 +9,17 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatResponse {
+public class UserResponse {
 
     private String id;
 
+    private String phone;
+
+    private String email;
+
     private String name;
 
-//    private List<MessageResponse> messages;
+    private String description;
 
-//    private List<UserResponse> users;
+//    private List<ChatResponse> chats;
 }

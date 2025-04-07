@@ -1,6 +1,5 @@
 package ua.edu.ukma.hibskyi.messenger.controller.rest;
 
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ua.edu.ukma.hibskyi.messenger.model.response.ChatResponse;
-import ua.edu.ukma.hibskyi.messenger.model.view.ChatView;
+import ua.edu.ukma.hibskyi.messenger.dto.response.ChatResponse;
+import ua.edu.ukma.hibskyi.messenger.dto.view.ChatView;
 import ua.edu.ukma.hibskyi.messenger.service.ChatService;
 
 import java.util.List;
@@ -36,12 +35,12 @@ public class ChatController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createChat(@Valid @RequestBody ChatView chat) {
+    public ResponseEntity<String> createChat(@RequestBody ChatView chat) {
         return new ResponseEntity<>(chatService.create(chat), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> updateChat(@PathVariable String id, @Valid @RequestBody ChatView chat) {
+    public ResponseEntity<HttpStatus> updateChat(@PathVariable String id, @RequestBody ChatView chat) {
         chatService.update(id, chat);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

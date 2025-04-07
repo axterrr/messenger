@@ -3,14 +3,12 @@ package ua.edu.ukma.hibskyi.messenger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-//TODO: add validation
-//TODO: add exceptions
-//TODO: add exception handling
-//TODO: add security
-
 // TODO:
+//  - add thymeleaf and views controllers
+//  - add security
 //  - make email nullable and add username
-
+//  - mergers for updates
+//  - done mappers / fix potential problems with lazy initialization
 
 @SpringBootApplication
 public class MessengerApplication {

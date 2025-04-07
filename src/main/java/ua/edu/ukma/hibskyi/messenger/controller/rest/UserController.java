@@ -1,6 +1,5 @@
 package ua.edu.ukma.hibskyi.messenger.controller.rest;
 
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ua.edu.ukma.hibskyi.messenger.model.response.UserResponse;
-import ua.edu.ukma.hibskyi.messenger.model.view.UserView;
+import ua.edu.ukma.hibskyi.messenger.dto.response.UserResponse;
+import ua.edu.ukma.hibskyi.messenger.dto.view.UserView;
 import ua.edu.ukma.hibskyi.messenger.service.UserService;
 
 import java.util.List;
@@ -36,12 +35,12 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createUser(@Valid @RequestBody UserView user) {
+    public ResponseEntity<String> createUser(@RequestBody UserView user) {
         return new ResponseEntity<>(userService.create(user), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> updateUser(@PathVariable String id, @Valid @RequestBody UserView user) {
+    public ResponseEntity<HttpStatus> updateUser(@PathVariable String id, @RequestBody UserView user) {
         userService.update(id, user);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

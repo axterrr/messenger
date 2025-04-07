@@ -1,4 +1,4 @@
-package ua.edu.ukma.hibskyi.messenger.model.entity;
+package ua.edu.ukma.hibskyi.messenger.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,6 +10,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,6 +35,8 @@ public class MessageEntity implements Identifiable<String> {
     private String id;
 
     @Column(name = "content", nullable = false)
+    @NotBlank(message = "Message content cannot be blank")
+    @Size(max = 1000, message = "Message content is too large")
     private String content;
 
     @CreationTimestamp
@@ -40,10 +45,12 @@ public class MessageEntity implements Identifiable<String> {
     private LocalDateTime sentAt;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "chat_id", updatable = false, nullable = false)
+    @JoinColumn(name = "chat_id", nullable = false, updatable = false)
+    @NotNull(message = "Message must have a chat")
     private ChatEntity chat;
 
     @ManyToOne
     @JoinColumn(name = "sender_id", updatable = false)
+    @NotNull(message = "Message must have a sender")
     private UserEntity sender;
 }

@@ -2,9 +2,9 @@ package ua.edu.ukma.hibskyi.messenger.mapper;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import ua.edu.ukma.hibskyi.messenger.model.entity.UserEntity;
-import ua.edu.ukma.hibskyi.messenger.model.response.UserResponse;
-import ua.edu.ukma.hibskyi.messenger.model.view.UserView;
+import ua.edu.ukma.hibskyi.messenger.entity.UserEntity;
+import ua.edu.ukma.hibskyi.messenger.dto.response.UserResponse;
+import ua.edu.ukma.hibskyi.messenger.dto.view.UserView;
 
 @Component
 @AllArgsConstructor
