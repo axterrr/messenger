@@ -3,9 +3,9 @@ package ua.edu.ukma.hibskyi.messenger.mapper;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import ua.edu.ukma.hibskyi.messenger.entity.UserEntity;
 import ua.edu.ukma.hibskyi.messenger.dto.response.UserResponse;
 import ua.edu.ukma.hibskyi.messenger.dto.view.UserView;
+import ua.edu.ukma.hibskyi.messenger.entity.UserEntity;
 
 @Component
 @AllArgsConstructor
@@ -35,9 +35,7 @@ public class UserMapper extends BaseMapperImpl<UserEntity, UserView, UserRespons
             .email(entity.getEmail())
             .name(entity.getName())
             .description(entity.getDescription())
-//            .chats(entity.getChats().stream()
-//                .map(chatMapper::mapToResponse)
-//                .toList())
+//            .chats(mapIfInitialized(entity.getChats(), chatMapper::mapToResponse))
             .build();
     }
 }

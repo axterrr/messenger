@@ -1,12 +1,12 @@
 package ua.edu.ukma.hibskyi.messenger.validator;
 
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
-import ua.edu.ukma.hibskyi.messenger.exception.ValidationException;
+import org.springframework.stereotype.Component;
 import ua.edu.ukma.hibskyi.messenger.entity.UserEntity;
+import ua.edu.ukma.hibskyi.messenger.exception.ValidationException;
 import ua.edu.ukma.hibskyi.messenger.repository.UserRepository;
 
-@Service
+@Component
 @AllArgsConstructor
 public class UserValidator extends BaseValidatorImpl<UserEntity, String> {
 

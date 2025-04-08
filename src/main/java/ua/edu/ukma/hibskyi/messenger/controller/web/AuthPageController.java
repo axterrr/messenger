@@ -17,7 +17,7 @@ public class AuthPageController {
     public String login() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-            return "redirect:/home";
+            return "redirect:/";
         }
         return "auth/login";
     }

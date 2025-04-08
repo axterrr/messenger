@@ -1,13 +1,13 @@
 package ua.edu.ukma.hibskyi.messenger.validator;
 
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import ua.edu.ukma.hibskyi.messenger.entity.MessageEntity;
 import ua.edu.ukma.hibskyi.messenger.exception.ValidationException;
 import ua.edu.ukma.hibskyi.messenger.repository.ChatRepository;
 import ua.edu.ukma.hibskyi.messenger.repository.UserRepository;
 
-@Service
+@Component
 @AllArgsConstructor
 public class MessageValidator extends BaseValidatorImpl<MessageEntity, String> {
 
@@ -25,7 +25,7 @@ public class MessageValidator extends BaseValidatorImpl<MessageEntity, String> {
             throw new ValidationException("Cannot create message in non existing chat");
         }
         if (!userRepository.existsById(senderId)) {
-            throw  new ValidationException("Cannot create message with non existing sender");
+            throw new ValidationException("Cannot create message with non existing sender");
         }
 
         if (!chatRepository.existsByIdAndUsersId(chatId, senderId)) {

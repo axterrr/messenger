@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Messenger</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/chat.css">
+</head>
+<body>
+
+<div class="container-fluid">
+  <div class="row chat-container shadow-lg">
+
+    <div class="col-md-4 border-end chat-list">
+      <h5>Your chats</h5>
+      <ul class="list-group list-group-flush">
+        <li th:each="chat : ${chats}" class="list-group-item">
+          <a th:href="@{/(chat=${chat.id})}" th:text="${chat.name}"></a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="col-md-8 p-4 bg-white">
+      <div th:if="${activeChat != null}" class="chat-body d-flex flex-column h-100">
+        <h4 class="mb-4" th:text="${activeChat.name}"></h4>
+
+        <div class="message-box" id="messages">
+          <div th:each="message : ${activeChatMessages}"
+               th:classappend="${message.sender.username == currentUser.username} ? 'message from-user' : 'message from-other'">
+            <span class="username" th:text="${message.sender.username}"></span>
+            <div>
+              <span th:text="${message.content}"></span>
+              <small class="text-muted d-block" th:text="${message.sentAtFormatted}"></small>
+            </div>
+          </div>
+        </div>
+
+        <form th:action="@{/messages/send}" method="post" class="d-flex message-form">
+          <input type="hidden" name="senderId" th:value="${currentUser.id}"/>
+          <input type="hidden" name="chatId" th:value="${activeChat.id}"/>
+          <input type="text" name="text" class="form-control me-2" placeholder="Enter the message..." required/>
+          <button type="submit" class="btn btn-primary">Send</button>
+        </form>
+      </div>
+
+      <div th:unless="${activeChat != null}" class="text-center text-muted inactive-chat-message">
+        <h5>Choose a chat, to start communication</h5>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

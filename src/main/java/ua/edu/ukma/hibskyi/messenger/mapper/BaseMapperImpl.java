@@ -9,4 +9,11 @@ public abstract class BaseMapperImpl<ENTITY, VIEW, RESPONSE> implements BaseMapp
             .map(this::mapToResponse)
             .toList();
     }
+
+//    protected static <T, R> List<R> mapIfInitialized(Collection<T> collection, Function<T, R> mapper) {
+//        if (collection != null && Hibernate.isInitialized(collection)) {
+//            return collection.stream().map(mapper).toList();
+//        }
+//        return new ArrayList<>();
+//    }
 }

@@ -1,16 +1,14 @@
 package ua.edu.ukma.hibskyi.messenger.mapper;
 
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import ua.edu.ukma.hibskyi.messenger.entity.ChatEntity;
-import ua.edu.ukma.hibskyi.messenger.entity.UserEntity;
 import ua.edu.ukma.hibskyi.messenger.dto.response.ChatResponse;
 import ua.edu.ukma.hibskyi.messenger.dto.view.ChatView;
+import ua.edu.ukma.hibskyi.messenger.entity.ChatEntity;
+import ua.edu.ukma.hibskyi.messenger.entity.UserEntity;
 
 import java.util.ArrayList;
 
 @Component
-@AllArgsConstructor
 public class ChatMapper extends BaseMapperImpl<ChatEntity, ChatView, ChatResponse> {
 
 //    private MessageMapper messageMapper;
@@ -32,12 +30,8 @@ public class ChatMapper extends BaseMapperImpl<ChatEntity, ChatView, ChatRespons
         return ChatResponse.builder()
             .id(entity.getId())
             .name(entity.getName())
-//            .messages(entity.getMessages().stream()
-//                .map(messageMapper::mapToResponse)
-//                .toList())
-//            .users(entity.getUsers().stream()
-//                .map(userMapper::mapToResponse)
-//                .toList())
+//            .messages(mapIfInitialized(entity.getMessages(), messageMapper::mapToResponse))
+//            .users(mapIfInitialized(entity.getUsers(), userMapper::mapToResponse))
             .build();
     }
 }

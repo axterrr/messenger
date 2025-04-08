@@ -2,18 +2,18 @@ package ua.edu.ukma.hibskyi.messenger.mapper;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import ua.edu.ukma.hibskyi.messenger.dto.response.MessageResponse;
+import ua.edu.ukma.hibskyi.messenger.dto.view.MessageView;
 import ua.edu.ukma.hibskyi.messenger.entity.ChatEntity;
 import ua.edu.ukma.hibskyi.messenger.entity.MessageEntity;
 import ua.edu.ukma.hibskyi.messenger.entity.UserEntity;
-import ua.edu.ukma.hibskyi.messenger.dto.response.MessageResponse;
-import ua.edu.ukma.hibskyi.messenger.dto.view.MessageView;
 
 @Component
 @AllArgsConstructor
 public class MessageMapper extends BaseMapperImpl<MessageEntity, MessageView, MessageResponse> {
 
-//    private ChatMapper chatMapper;
-//    private UserMapper userMapper;
+    private ChatMapper chatMapper;
+    private UserMapper userMapper;
 
     @Override
     public MessageEntity mapToEntity(MessageView view) {
@@ -34,8 +34,8 @@ public class MessageMapper extends BaseMapperImpl<MessageEntity, MessageView, Me
             .id(entity.getId())
             .content(entity.getContent())
             .sentAt(entity.getSentAt())
-//            .chat(chatMapper.mapToResponse(entity.getChat()))
-//            .sender(userMapper.mapToResponse(entity.getSender()))
+            .chat(chatMapper.mapToResponse(entity.getChat()))
+            .sender(userMapper.mapToResponse(entity.getSender()))
             .build();
     }
 }

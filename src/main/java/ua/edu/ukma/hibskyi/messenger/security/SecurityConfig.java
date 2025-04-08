@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated())
             .formLogin(login -> login
                 .loginPage("/auth/login")
-                .defaultSuccessUrl("/home"))
+                .defaultSuccessUrl("/"))
             .logout(logout -> logout
                 .logoutUrl("/auth/logout")
                 .deleteCookies("SECRET_TOKEN"))

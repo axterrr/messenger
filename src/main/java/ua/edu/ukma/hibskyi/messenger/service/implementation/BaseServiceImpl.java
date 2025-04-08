@@ -1,6 +1,7 @@
 package ua.edu.ukma.hibskyi.messenger.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import ua.edu.ukma.hibskyi.messenger.exception.NotFoundException;
 import ua.edu.ukma.hibskyi.messenger.mapper.BaseMapper;
 import ua.edu.ukma.hibskyi.messenger.entity.Identifiable;
@@ -10,6 +11,7 @@ import ua.edu.ukma.hibskyi.messenger.validator.BaseValidator;
 
 import java.util.List;
 
+@Transactional
 public abstract class BaseServiceImpl<ENTITY extends Identifiable<ID>, VIEW, RESPONSE, ID>
         implements BaseService<VIEW, RESPONSE, ID> {
 
@@ -57,7 +59,7 @@ public abstract class BaseServiceImpl<ENTITY extends Identifiable<ID>, VIEW, RES
         repository.deleteById(id);
     }
 
-    private ENTITY getEntityById(ID id) {
+    protected ENTITY getEntityById(ID id) {
         return repository.findById(id)
             .orElseThrow(() -> new NotFoundException("Entity with such id was not found"));
     }
