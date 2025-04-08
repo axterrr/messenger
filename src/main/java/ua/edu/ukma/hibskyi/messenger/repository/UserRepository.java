@@ -10,7 +10,11 @@ public interface UserRepository extends BaseRepository<UserEntity, String> {
 
     boolean existsByPhone(String phone);
 
+    boolean existsByUsername(String username);
+
     Optional<UserEntity> findByEmail(String email);
 
     Optional<UserEntity> findByPhone(String phone);
+
+    Optional<UserEntity> findByUsername(String username);
 }

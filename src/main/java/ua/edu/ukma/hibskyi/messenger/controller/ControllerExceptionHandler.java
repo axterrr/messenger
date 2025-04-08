@@ -28,6 +28,6 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception ex) {
-        return new ResponseEntity<>("Unexpected exception", HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>("Unexpected exception: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -25,8 +25,11 @@ public class UserValidator extends BaseValidatorImpl<UserEntity, String> {
         if (userRepository.existsByPhone(entity.getPhone())) {
             throw new ValidationException("User with such phone already exists");
         }
-        if (userRepository.existsByEmail(entity.getEmail())) {
+        if (entity.getEmail() != null && userRepository.existsByEmail(entity.getEmail())) {
             throw new ValidationException("User with such email already exists");
+        }
+        if (userRepository.existsByUsername(entity.getUsername())) {
+            throw new ValidationException("User with such username already exists");
         }
     }
 
@@ -39,9 +42,16 @@ public class UserValidator extends BaseValidatorImpl<UserEntity, String> {
                 throw new ValidationException("User with such phone already exists");
             }
         });
-        userRepository.findByEmail(entity.getEmail()).ifPresent(existing -> {
+        if (entity.getEmail() != null) {
+            userRepository.findByEmail(entity.getEmail()).ifPresent(existing -> {
+                if (!existing.getId().equals(entity.getId())) {
+                    throw new ValidationException("User with such email already exists");
+                }
+            });
+        }
+        userRepository.findByUsername(entity.getUsername()).ifPresent(existing -> {
             if (!existing.getId().equals(entity.getId())) {
-                throw new ValidationException("User with such email already exists");
+                throw new ValidationException("User with such username already exists");
             }
         });
     }

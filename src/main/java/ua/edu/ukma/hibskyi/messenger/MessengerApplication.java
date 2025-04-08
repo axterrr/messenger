@@ -5,8 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 // TODO:
 //  - add thymeleaf and views controllers
-//  - add security
-//  - make email nullable and add username
+//  - update security
 //  - mergers for updates
 //  - done mappers / fix potential problems with lazy initialization
 
