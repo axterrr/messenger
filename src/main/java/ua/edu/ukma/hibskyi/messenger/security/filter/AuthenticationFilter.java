@@ -1,12 +1,11 @@
 package ua.edu.ukma.hibskyi.messenger.security.filter;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,30 +15,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import ua.edu.ukma.hibskyi.messenger.security.JWTUtility;
 
 import java.io.IOException;
-import java.util.Map;
 
+@AllArgsConstructor
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final AuthenticationManager authenticationManager;
-    private final JWTUtility jwtUtility;
-
-    public AuthenticationFilter(AuthenticationManager authenticationManager, JWTUtility jwtUtility) {
-        this.authenticationManager = authenticationManager;
-        this.jwtUtility = jwtUtility;
-        setFilterProcessesUrl("/api/auth/login");
-    }
+    private AuthenticationManager authenticationManager;
+    private JWTUtility jwtUtility;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
-        Map<String, String> body;
-        try {
-            body = new ObjectMapper().readValue(request.getInputStream(), new TypeReference<>() {});
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        String username = body.get("username");
-        String password = body.get("password");
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
 
         if (username == null || username.isBlank()) {
             throw new BadCredentialsException("Username cannot be empty.");
@@ -66,8 +53,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     protected void unsuccessfulAuthentication(HttpServletRequest request,
                                               HttpServletResponse response,
                                               AuthenticationException failed) throws IOException {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getWriter().write(failed.getMessage());
-        response.getWriter().flush();
+        response.sendRedirect("/auth/login?error");
     }
 }

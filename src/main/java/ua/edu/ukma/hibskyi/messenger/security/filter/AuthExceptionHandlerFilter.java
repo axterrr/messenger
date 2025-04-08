@@ -23,7 +23,7 @@ public class AuthExceptionHandlerFilter extends OncePerRequestFilter {
             response.getWriter().flush();
         } catch (RuntimeException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("Bad request");
+            response.getWriter().write("Bad request: " + e.getMessage());
             response.getWriter().flush();
         }
     }
