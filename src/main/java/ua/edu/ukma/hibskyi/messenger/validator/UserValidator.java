@@ -3,6 +3,7 @@ package ua.edu.ukma.hibskyi.messenger.validator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ua.edu.ukma.hibskyi.messenger.entity.UserEntity;
+import ua.edu.ukma.hibskyi.messenger.exception.ConflictException;
 import ua.edu.ukma.hibskyi.messenger.exception.ValidationException;
 import ua.edu.ukma.hibskyi.messenger.repository.UserRepository;
 
@@ -22,14 +23,15 @@ public class UserValidator extends BaseValidatorImpl<UserEntity, String> {
         if (entity.getMessages() != null && !entity.getMessages().isEmpty()) {
             throw new ValidationException("Cannot create user with messages");
         }
+
         if (userRepository.existsByPhone(entity.getPhone())) {
-            throw new ValidationException("User with such phone already exists");
+            throw new ConflictException("User with such phone already exists");
         }
         if (entity.getEmail() != null && userRepository.existsByEmail(entity.getEmail())) {
-            throw new ValidationException("User with such email already exists");
+            throw new ConflictException("User with such email already exists");
         }
         if (userRepository.existsByUsername(entity.getUsername())) {
-            throw new ValidationException("User with such username already exists");
+            throw new ConflictException("User with such username already exists");
         }
     }
 
@@ -39,19 +41,19 @@ public class UserValidator extends BaseValidatorImpl<UserEntity, String> {
 
         userRepository.findByPhone(entity.getPhone()).ifPresent(existing -> {
             if (!existing.getId().equals(entity.getId())) {
-                throw new ValidationException("User with such phone already exists");
+                throw new ConflictException("User with such phone already exists");
             }
         });
         if (entity.getEmail() != null) {
             userRepository.findByEmail(entity.getEmail()).ifPresent(existing -> {
                 if (!existing.getId().equals(entity.getId())) {
-                    throw new ValidationException("User with such email already exists");
+                    throw new ConflictException("User with such email already exists");
                 }
             });
         }
         userRepository.findByUsername(entity.getUsername()).ifPresent(existing -> {
             if (!existing.getId().equals(entity.getId())) {
-                throw new ValidationException("User with such username already exists");
+                throw new ConflictException("User with such username already exists");
             }
         });
     }

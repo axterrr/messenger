@@ -1,33 +1,32 @@
 package ua.edu.ukma.hibskyi.messenger.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import ua.edu.ukma.hibskyi.messenger.exception.NotFoundException;
-import ua.edu.ukma.hibskyi.messenger.exception.ValidationException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
+import ua.edu.ukma.hibskyi.messenger.exception.BaseException;
 
-@ControllerAdvice
+@ControllerAdvice()
 public class ControllerExceptionHandler {
 
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<String> handleNotFoundException(NotFoundException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    @ExceptionHandler(BaseException.class)
+    public String handleNotFoundException(BaseException ex, Model model) {
+        model.addAttribute("status", ex.getStatus());
+        model.addAttribute("message", ex.getMessage());
+        return "error/error";
     }
 
-    @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<String> handleValidationException(ValidationException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(NoResourceFoundException.class)
+    public String handleNoResourceFoundException(NoResourceFoundException ex, Model model) {
+        model.addAttribute("status", 404);
+        model.addAttribute("message", "Resource not found: " + ex.getMessage());
+        return "error/error";
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception ex) {
-        return new ResponseEntity<>("Unexpected exception: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    public String handleException(Exception ex, Model model) {
+        model.addAttribute("status", 500);
+        model.addAttribute("message", "Unexpected exception: " + ex.getMessage());
+        return "error/error";
     }
 }

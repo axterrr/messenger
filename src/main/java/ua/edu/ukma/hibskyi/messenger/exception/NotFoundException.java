@@ -1,7 +1,7 @@
 package ua.edu.ukma.hibskyi.messenger.exception;
 
-public class NotFoundException extends RuntimeException {
+public class NotFoundException extends BaseException {
     public NotFoundException(String message) {
-        super(message);
+        super(404, "Resource not found: " + message);
     }
 }

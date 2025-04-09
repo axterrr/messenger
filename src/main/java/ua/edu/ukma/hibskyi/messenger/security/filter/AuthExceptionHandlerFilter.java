@@ -19,11 +19,14 @@ public class AuthExceptionHandlerFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (JWTVerificationException e) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().write("Invali JWT token");
-            response.getWriter().flush();
+            response.sendRedirect("/auth/logout");
         } catch (RuntimeException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("Bad request: " + e.getMessage());
+            response.getWriter().flush();
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("Unexpected error: " + e.getMessage());
             response.getWriter().flush();
         }
     }
