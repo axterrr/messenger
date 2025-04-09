@@ -12,7 +12,7 @@
   <h2 class="text-danger">An Error Occurred</h2>
   <p th:text="'Status: ' + ${status}" class="fw-bold mt-3"></p>
   <p th:text="${message}" class="text-muted"></p>
-  <a href="/" class="btn btn-outline-primary">Return back</a>
+  <button onclick="history.go(-1)" class="btn btn-outline-primary">Return back</button>
 </div>
 </body>
 </html>

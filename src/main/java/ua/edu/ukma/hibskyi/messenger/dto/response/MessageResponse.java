@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Data
 @Builder
@@ -23,8 +22,4 @@ public class MessageResponse {
     private ChatResponse chat;
 
     private UserResponse sender;
-
-    public String getSentAtFormatted() {
-        return sentAt.format(DateTimeFormatter.ofPattern("HH:mm"));
-    }
 }

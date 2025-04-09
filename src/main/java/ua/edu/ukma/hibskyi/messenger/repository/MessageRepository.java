@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface MessageRepository extends BaseRepository<MessageEntity, String> {
 
-    List<MessageEntity> findByChatId(String chatId);
+    List<MessageEntity> findByChatIdOrderBySentAt(String chatId);
 }

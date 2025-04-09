@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Messenger</title>
@@ -11,27 +11,46 @@
 <div class="container-fluid">
   <div class="row chat-container shadow-lg">
 
-    <div class="col-md-4 border-end chat-list">
-      <h5>Your chats</h5>
-      <ul class="list-group list-group-flush">
-        <li th:each="chat : ${chats}" class="list-group-item">
-          <a th:href="@{/(chat=${chat.id})}" th:text="${chat.name}"></a>
-        </li>
-      </ul>
+    <div class="col-md-3 p-0 chat-list">
+      <div class="chat-list-header">
+        <h4>Your chats</h4>
+      </div>
+
+      <div class="chats">
+        <div th:each="chat : ${chats}" class="chat-list-item">
+          <a th:classappend="${activeChat != null and activeChat.id == chat.id} ? 'active'"
+             th:href="@{/(chat=${chat.id})}" th:text="${chat.name}"></a>
+        </div>
+      </div>
     </div>
 
-    <div class="col-md-8 p-4 bg-white">
+    <div class="col-md-9 p-0 bg-white">
       <div th:if="${activeChat != null}" class="chat-body d-flex flex-column h-100">
-        <h4 class="mb-4" th:text="${activeChat.name}"></h4>
+
+        <div class="chat-header">
+          <h4 th:text="${activeChat.name}"></h4>
+        </div>
 
         <div class="message-box" id="messages">
-          <div th:each="message : ${activeChatMessages}"
-               th:classappend="${message.sender.username == currentUser.username} ? 'message from-user' : 'message from-other'">
-            <span class="username" th:text="${message.sender.username}"></span>
-            <div>
-              <span th:text="${message.content}"></span>
-              <small class="text-muted d-block" th:text="${message.sentAtFormatted}"></small>
+          <div th:each="message, iterStat : ${activeChatMessages}"
+               th:classappend="${message.sender.username == currentUser.username} ? 'message-wrapper from-user' : 'message-wrapper from-other'">
+
+            <div th:if="${iterStat.index == 0} or ${#temporals.format(message.sentAt, 'ddMMyyyy') != #temporals.format(activeChatMessages[iterStat.index - 1].sentAt, 'ddMMyyyy')}"
+                 class="date-divider">
+              <small th:text="${#temporals.year(message.sentAt) == #temporals.year(#temporals.createToday()) ? #temporals.format(message.sentAt, 'd MMMM') : #temporals.format(message.sentAt, 'd MMMM yyyy')}"></small>
             </div>
+
+            <div class="message">
+              <span th:if="${message.sender.username != currentUser.username}" class="username" th:text="${message.sender.username}"></span>
+              <div>
+                <span th:text="${message.content}"></span>
+                <small class="text-muted d-block" th:text="${#temporals.format(message.sentAt, 'HH:mm')}"></small>
+              </div>
+            </div>
+          </div>
+
+          <div th:if="${activeChatMessages.isEmpty()}" class="text-center text-muted inactive-chat-message">
+            <h5>Send the first message</h5>
           </div>
         </div>
 
@@ -52,5 +71,6 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/scripts/chat.js"></script>
 </body>
 </html>

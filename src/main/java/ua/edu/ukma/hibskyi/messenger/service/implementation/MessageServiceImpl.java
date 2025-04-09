@@ -18,6 +18,6 @@ public class MessageServiceImpl extends BaseServiceImpl<MessageEntity, MessageVi
 
     @Override
     public List<MessageResponse> getByChatId(String chatId) {
-        return mapper.mapToResponse(messageRepository.findByChatId(chatId));
+        return mapper.mapToResponse(messageRepository.findByChatIdOrderBySentAt(chatId));
     }
 }
