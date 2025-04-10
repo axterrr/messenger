@@ -1,6 +1,8 @@
 package ua.edu.ukma.hibskyi.messenger.service.implementation;
 
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ua.edu.ukma.hibskyi.messenger.dto.response.UserResponse;
@@ -12,6 +14,12 @@ import ua.edu.ukma.hibskyi.messenger.service.UserService;
 public class AuthServiceImpl implements AuthService {
 
     private UserService userService;
+
+    @Override
+    public boolean isAuthenticated() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
+    }
 
     @Override
     public UserResponse getAuthenticatedUser() {

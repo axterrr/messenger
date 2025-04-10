@@ -11,9 +11,6 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,8 +34,6 @@ public class ChatEntity implements Identifiable<String> {
     private String id;
 
     @Column(name = "name")
-    @Size(max = 30, message = "Chat name is too large")
-    @NotBlank(message = "Chat name cannot be blank")
     private String name;
 
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
@@ -52,7 +47,6 @@ public class ChatEntity implements Identifiable<String> {
         joinColumns = @JoinColumn(name = "chat_id"),
         inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    @NotEmpty(message = "Chat must contain at least 1 user")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<UserEntity> users;

@@ -2,6 +2,7 @@ package ua.edu.ukma.hibskyi.messenger.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -28,8 +29,9 @@ public class SecurityConfig {
         return http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/js/**", "/css/**").permitAll()
                 .requestMatchers("/auth/**").permitAll()
-//                .requestMatchers(HttpMethod.POST, "api/user").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
                 .anyRequest().authenticated())
             .formLogin(login -> login
                 .loginPage("/auth/login")

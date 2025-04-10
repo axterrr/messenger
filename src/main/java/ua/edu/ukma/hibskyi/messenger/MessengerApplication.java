@@ -5,10 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 // TODO:
 //  - add thymeleaf and views controllers
-//  - improve security and validation (authorisation error and validation; validation for password)
+//  - authorisation error and validation
 //  - mergers for updates
-//  - register page
-//  - XSS/SQl injections
+//  - AJAX
 
 @SpringBootApplication
 public class MessengerApplication {

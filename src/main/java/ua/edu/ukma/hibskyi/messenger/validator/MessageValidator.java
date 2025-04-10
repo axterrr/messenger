@@ -2,6 +2,7 @@ package ua.edu.ukma.hibskyi.messenger.validator;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import ua.edu.ukma.hibskyi.messenger.dto.view.MessageView;
 import ua.edu.ukma.hibskyi.messenger.entity.MessageEntity;
 import ua.edu.ukma.hibskyi.messenger.exception.ConflictException;
 import ua.edu.ukma.hibskyi.messenger.repository.ChatRepository;
@@ -9,26 +10,23 @@ import ua.edu.ukma.hibskyi.messenger.repository.UserRepository;
 
 @Component
 @AllArgsConstructor
-public class MessageValidator extends BaseValidatorImpl<MessageEntity, String> {
+public class MessageValidator extends BaseValidatorImpl<MessageEntity, MessageView, String> {
 
     private UserRepository userRepository;
     private ChatRepository chatRepository;
 
     @Override
-    public void validateForCreate(MessageEntity entity) {
-        super.validateForCreate(entity);
+    public void validateForCreate(MessageView view) {
+        super.validateForCreate(view);
 
-        String chatId = entity.getChat().getId();
-        String senderId = entity.getSender().getId();
-
-        if (!chatRepository.existsById(chatId)) {
+        if (!chatRepository.existsById(view.getChatId())) {
             throw new ConflictException("Cannot create message in non existing chat");
         }
-        if (!userRepository.existsById(senderId)) {
+        if (!userRepository.existsById(view.getSenderId())) {
             throw new ConflictException("Cannot create message with non existing sender");
         }
 
-        if (!chatRepository.existsByIdAndUsersId(chatId, senderId)) {
+        if (!chatRepository.existsByIdAndUsersId(view.getChatId(), view.getSenderId())) {
             throw new ConflictException("Sender must be a member of the chat");
         }
     }

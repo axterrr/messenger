@@ -22,7 +22,7 @@ public abstract class BaseServiceImpl<ENTITY extends Identifiable<ID>, VIEW, RES
     protected BaseMapper<ENTITY, VIEW, RESPONSE> mapper;
 
     @Autowired
-    protected BaseValidator<ENTITY> validator;
+    protected BaseValidator<ENTITY, VIEW, ID> validator;
 
     @Override
     public List<RESPONSE> getAll() {
@@ -38,24 +38,23 @@ public abstract class BaseServiceImpl<ENTITY extends Identifiable<ID>, VIEW, RES
 
     @Override
     public ID create(VIEW view) {
+        validator.validateForCreate(view);
         ENTITY entity = mapper.mapToEntity(view);
-        validator.validateForCreate(entity);
         return repository.save(entity).getId();
     }
 
     @Override
     public void update(ID id, VIEW view) {
         ENTITY existing = getEntityById(id);
-        ENTITY entity = mapper.mapToEntity(view);
-        entity.setId(id);
-        validator.validateForUpdate(entity);
-        repository.save(entity);
+        validator.validateForUpdate(view, existing);
+        ENTITY newEntity = mapper.mapToEntity(view);
+        newEntity.setId(id);
+        repository.save(newEntity);
     }
 
     @Override
     public void deleteById(ID id) {
-        ENTITY entity = getEntityById(id);
-        validator.validateForDelete(entity);
+        validator.validateForDelete(id);
         repository.deleteById(id);
     }
 

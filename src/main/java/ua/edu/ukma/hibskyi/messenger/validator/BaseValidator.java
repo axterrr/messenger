@@ -1,10 +1,10 @@
 package ua.edu.ukma.hibskyi.messenger.validator;
 
-public interface BaseValidator<ENTITY> {
+public interface BaseValidator<ENTITY, VIEW, ID> {
 
-    void validateForCreate(ENTITY entity);
+    void validateForCreate(VIEW view);
 
-    void validateForUpdate(ENTITY entity);
+    void validateForUpdate(VIEW view, ENTITY entity);
 
-    void validateForDelete(ENTITY entity);
+    void validateForDelete(ID id);
 }

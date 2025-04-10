@@ -27,7 +27,7 @@ document.getElementById("send-message-form").addEventListener('submit', function
         .catch(error => {
             const errorBox = document.getElementById('send-message-error');
             errorBox.innerHTML = '';
-            error.messages.forEach(msg => {
+            error.messages.sort().forEach(msg => {
                 const line = document.createElement('div');
                 line.style.paddingLeft = '10px'
                 line.textContent = msg;
