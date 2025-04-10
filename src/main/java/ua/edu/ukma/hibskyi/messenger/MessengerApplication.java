@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 //  - improve security and validation (authorisation error and validation; validation for password)
 //  - mergers for updates
 //  - register page
+//  - XSS/SQl injections
 
 @SpringBootApplication
 public class MessengerApplication {

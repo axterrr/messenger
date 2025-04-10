@@ -48,10 +48,9 @@ public abstract class BaseValidatorImpl<ENTITY extends Identifiable<ID>, ID> imp
     }
 
     private void throwException(Set<ConstraintViolation<ENTITY>> violations) {
-        StringBuilder errorMessage = new StringBuilder();
-        for (ConstraintViolation<ENTITY> violation : violations) {
-            errorMessage.append(violation.getMessage()).append("; ");
-        }
-        throw new ValidationException(errorMessage.toString());
+        throw new ValidationException(violations.stream()
+            .map(ConstraintViolation::getMessage)
+            .toList()
+        );
     }
 }

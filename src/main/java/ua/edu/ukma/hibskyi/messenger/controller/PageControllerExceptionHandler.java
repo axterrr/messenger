@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import ua.edu.ukma.hibskyi.messenger.exception.BaseException;
 
-@ControllerAdvice()
-public class ControllerExceptionHandler {
+@ControllerAdvice(basePackages = "ua.edu.ukma.hibskyi.messenger.controller.web")
+public class PageControllerExceptionHandler {
 
     @ExceptionHandler(BaseException.class)
-    public String handleNotFoundException(BaseException ex, Model model) {
+    public String handleBaseException(BaseException ex, Model model) {
         model.addAttribute("status", ex.getStatus());
         model.addAttribute("message", ex.getMessage());
         return "error/error";
