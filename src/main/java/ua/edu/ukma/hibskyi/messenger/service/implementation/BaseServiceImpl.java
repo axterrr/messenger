@@ -47,11 +47,10 @@ public abstract class BaseServiceImpl<ENTITY extends Identifiable<ID>, VIEW, RES
 
     @Override
     public void update(ID id, VIEW view) {
-        ENTITY existing = getEntityById(id);
-        validator.validateForUpdate(view, existing);
-        ENTITY newEntity = mapper.mapToEntity(view);
-        newEntity.setId(id);
-        repository.save(newEntity);
+        ENTITY entity = getEntityById(id);
+        validator.validateForUpdate(view, entity);
+        mapper.merge(view, entity);
+        repository.save(entity);
     }
 
     @Override

@@ -13,51 +13,48 @@ import ua.edu.ukma.hibskyi.messenger.service.AuthService;
 
 @Component
 @AllArgsConstructor
-public class MessageMapper extends BaseMapperImpl<MessageEntity, MessageView, MessageResponse> {
+public class MessageMapper implements BaseMapper<MessageEntity, MessageView, MessageResponse> {
 
     private AuthService authService;
 
     @Override
     public MessageEntity mapToEntity(MessageView view) {
-        if (view == null) {
-            return null;
-        }
-
+        if (view == null) { return null; }
         return MessageEntity.builder()
             .content(view.getContent())
-            .chat(ChatEntity.builder()
-                .id(view.getChatId())
-                .build())
-            .sender(UserEntity.builder()
-                .id(authService.getAuthenticatedUserId())
-                .build())
+            .chat(MapperUtils.chatEntityFromId(view.getChatId()))
+            .sender(MapperUtils.userEntityFromId(authService.getAuthenticatedUserId()))
             .build();
     }
 
     @Override
-    public MessageResponse mapToResponse(MessageEntity entity) {
-        if (entity == null) {
-            return null;
-        }
+    public void merge(MessageView view, MessageEntity entity) {
+        if (view == null) { return; }
+        MapperUtils.ifNotNull(view.getContent(), entity::setContent);
+    }
 
+    @Override
+    public MessageResponse mapToResponse(MessageEntity entity) {
+        if (entity == null) { return null; }
         return MessageResponse.builder()
             .id(entity.getId())
             .content(entity.getContent())
             .sentAt(entity.getSentAt())
-            .chat(entity.getChat() == null ? null : ChatResponse.builder()
-                .id(entity.getChat().getId())
-                .name(entity.getChat().getName())
-                .owner(mapUserToResponse(entity.getChat().getOwner()))
-                .build())
+            .chat(mapChatToResponse(entity.getChat()))
             .sender(mapUserToResponse(entity.getSender()))
             .build();
     }
 
-    private UserResponse mapUserToResponse(UserEntity user) {
-        if (user == null) {
-            return null;
-        }
+    private ChatResponse mapChatToResponse(ChatEntity chat) {
+        if (chat == null) { return null; }
+        return ChatResponse.builder()
+            .id(chat.getId())
+            .name(chat.getName())
+            .build();
+    }
 
+    private UserResponse mapUserToResponse(UserEntity user) {
+        if (user == null) { return null; }
         return UserResponse.builder()
             .id(user.getId())
             .username(user.getUsername())

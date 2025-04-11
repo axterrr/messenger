@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 // TODO:
 //  - add thymeleaf and views controllers
-//  - mergers for updates
 //  - AJAX
 
 @SpringBootApplication

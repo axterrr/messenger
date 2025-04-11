@@ -6,7 +6,14 @@ public interface BaseMapper<ENTITY, VIEW, RESPONSE> {
 
     ENTITY mapToEntity(VIEW view);
 
+    void merge(VIEW view, ENTITY entity);
+
     RESPONSE mapToResponse(ENTITY entity);
 
-    List<RESPONSE> mapToResponse(List<ENTITY> list);
+    default List<RESPONSE> mapToResponse(List<ENTITY> list) {
+        if (list == null) return List.of();
+        return list.stream()
+            .map(this::mapToResponse)
+            .toList();
+    }
 }
