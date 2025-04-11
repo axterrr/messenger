@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import ua.edu.ukma.hibskyi.messenger.dto.view.UserView;
 import ua.edu.ukma.hibskyi.messenger.entity.UserEntity;
 import ua.edu.ukma.hibskyi.messenger.exception.ConflictException;
+import ua.edu.ukma.hibskyi.messenger.exception.ForbiddenException;
 import ua.edu.ukma.hibskyi.messenger.exception.ValidationException;
 import ua.edu.ukma.hibskyi.messenger.repository.UserRepository;
 
@@ -56,6 +57,32 @@ public class UserValidator extends BaseValidatorImpl<UserEntity, UserView, Strin
                 throw new ConflictException("User with such username already exists");
             }
         });
+    }
+
+    @Override
+    protected void validatePermissionForView(UserEntity entity) {
+
+    }
+
+    @Override
+    protected void validatePermissionForCreate(UserView view) {
+        if (authService.isAuthenticated()) {
+            throw new ForbiddenException();
+        }
+    }
+
+    @Override
+    protected void validatePermissionForUpdate(UserEntity entity) {
+        if (!entity.getId().equals(authService.getAuthenticatedUser().getId())) {
+            throw new ForbiddenException();
+        }
+    }
+
+    @Override
+    protected void validatePermissionForDelete(UserEntity entity) {
+        if (!entity.getId().equals(authService.getAuthenticatedUser().getId())) {
+            throw new ForbiddenException();
+        }
     }
 
     private void validatePassword(String password, String confirmPassword) {

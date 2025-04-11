@@ -56,9 +56,8 @@
 
         <div id="send-message-error" class="text-danger" style="display: none;"></div>
         <form class="d-flex message-form" id="send-message-form">
-          <input type="hidden" id="send-message-form-sender-id" th:value="${currentUser.id}"/>
           <input type="hidden" id="send-message-form-chat-id" th:value="${activeChat.id}"/>
-          <input type="text" id="send-message-form-content" class="form-control me-2" placeholder="Enter the message..."/>
+          <input type="text" id="send-message-form-content" class="form-control me-2" placeholder="Enter the message..." required/>
           <button type="submit" class="btn btn-primary">Send</button>
         </form>
       </div>

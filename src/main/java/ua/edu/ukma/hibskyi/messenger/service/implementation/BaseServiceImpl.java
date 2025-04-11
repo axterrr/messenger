@@ -22,18 +22,20 @@ public abstract class BaseServiceImpl<ENTITY extends Identifiable<ID>, VIEW, RES
     protected BaseMapper<ENTITY, VIEW, RESPONSE> mapper;
 
     @Autowired
-    protected BaseValidator<ENTITY, VIEW, ID> validator;
+    protected BaseValidator<ENTITY, VIEW> validator;
 
     @Override
     public List<RESPONSE> getAll() {
+        validator.validateForViewAll();
         List<ENTITY> result = repository.findAll();
         return mapper.mapToResponse(result);
     }
 
     @Override
     public RESPONSE getById(ID id) {
-        ENTITY result = getEntityById(id);
-        return mapper.mapToResponse(result);
+        ENTITY entity = getEntityById(id);
+        validator.validateForView(entity);
+        return mapper.mapToResponse(entity);
     }
 
     @Override
@@ -54,7 +56,8 @@ public abstract class BaseServiceImpl<ENTITY extends Identifiable<ID>, VIEW, RES
 
     @Override
     public void deleteById(ID id) {
-        validator.validateForDelete(id);
+        ENTITY entity = getEntityById(id);
+        validator.validateForDelete(entity);
         repository.deleteById(id);
     }
 

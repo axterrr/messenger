@@ -16,6 +16,10 @@ public class UserMapper extends BaseMapperImpl<UserEntity, UserView, UserRespons
 
     @Override
     public UserEntity mapToEntity(UserView view) {
+        if (view == null) {
+            return null;
+        }
+
         return UserEntity.builder()
             .phone(view.getPhone())
             .username(view.getUsername())
@@ -28,6 +32,10 @@ public class UserMapper extends BaseMapperImpl<UserEntity, UserView, UserRespons
 
     @Override
     public UserResponse mapToResponse(UserEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+
         return UserResponse.builder()
             .id(entity.getId())
             .phone(entity.getPhone())

@@ -19,7 +19,4 @@ public class MessageView {
 
     @NotBlank(message = "Message must have a chat")
     private String chatId;
-
-    @NotBlank(message = "Message must have a sender")
-    private String senderId;
 }

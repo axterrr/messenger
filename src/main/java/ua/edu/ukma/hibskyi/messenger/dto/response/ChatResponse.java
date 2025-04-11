@@ -15,6 +15,8 @@ public class ChatResponse {
 
     private String name;
 
+    private UserResponse owner;
+
 //    private List<MessageResponse> messages;
 
 //    private List<UserResponse> users;

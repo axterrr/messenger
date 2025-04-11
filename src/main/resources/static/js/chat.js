@@ -9,7 +9,6 @@ document.getElementById("send-message-form").addEventListener('submit', function
     const message = {
         content: document.getElementById('send-message-form-content').value,
         chatId: document.getElementById('send-message-form-chat-id').value,
-        senderId: document.getElementById('send-message-form-sender-id').value,
     };
 
     fetch('/api/message', {

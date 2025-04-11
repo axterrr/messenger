@@ -4,24 +4,32 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import ua.edu.ukma.hibskyi.messenger.exception.ForbiddenException;
 import ua.edu.ukma.hibskyi.messenger.exception.ValidationException;
 import ua.edu.ukma.hibskyi.messenger.entity.Identifiable;
-import ua.edu.ukma.hibskyi.messenger.repository.BaseRepository;
+import ua.edu.ukma.hibskyi.messenger.service.AuthService;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Transactional
-public abstract class BaseValidatorImpl<ENTITY extends Identifiable<ID>, VIEW, ID> implements BaseValidator<ENTITY, VIEW, ID> {
+public abstract class BaseValidatorImpl<ENTITY extends Identifiable<ID>, VIEW, ID> implements BaseValidator<ENTITY, VIEW> {
 
     @Autowired
     private Validator validator;
 
     @Autowired
-    private BaseRepository<ENTITY, ID> repository;
+    protected AuthService authService;
+
+    @Override
+    public void validateForView(ENTITY entity) {
+        validatePermissionForView(entity);
+    }
 
     @Override
     public void validateForCreate(VIEW view) {
+        validatePermissionForCreate(view);
+
         Set<ConstraintViolation<VIEW>> violations = validator.validate(view);
         if (!violations.isEmpty()) {
             throwException(violations);
@@ -30,6 +38,8 @@ public abstract class BaseValidatorImpl<ENTITY extends Identifiable<ID>, VIEW, I
 
     @Override
     public void validateForUpdate(VIEW view, ENTITY entity) {
+        validatePermissionForUpdate(entity);
+
         Set<ConstraintViolation<VIEW>> violations = validator.validate(view).stream()
             .filter(violation -> violation.getInvalidValue() != null)
             .collect(Collectors.toSet());
@@ -43,10 +53,8 @@ public abstract class BaseValidatorImpl<ENTITY extends Identifiable<ID>, VIEW, I
     }
 
     @Override
-    public void validateForDelete(ID id) {
-        if (!repository.existsById(id)) {
-            throw new ValidationException("Cannot delete non existing entity");
-        }
+    public void validateForDelete(ENTITY entity) {
+        validatePermissionForDelete(entity);
     }
 
     private void throwException(Set<ConstraintViolation<VIEW>> violations) {
@@ -55,4 +63,17 @@ public abstract class BaseValidatorImpl<ENTITY extends Identifiable<ID>, VIEW, I
             .toList()
         );
     }
+
+    @Override
+    public void validateForViewAll() {
+        throw new ForbiddenException();
+    }
+
+    protected abstract void validatePermissionForView(ENTITY entity);
+
+    protected abstract void validatePermissionForCreate(VIEW view);
+
+    protected abstract void validatePermissionForUpdate(ENTITY entity);
+
+    protected abstract void validatePermissionForDelete(ENTITY entity);
 }
