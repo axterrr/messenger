@@ -6,10 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ua.edu.ukma.hibskyi.messenger.dto.response.UserResponse;
 import ua.edu.ukma.hibskyi.messenger.service.AuthService;
 import ua.edu.ukma.hibskyi.messenger.service.ChatService;
-import ua.edu.ukma.hibskyi.messenger.service.MessageService;
+import ua.edu.ukma.hibskyi.messenger.service.UserService;
 
 @Controller
 @RequestMapping
@@ -17,20 +16,16 @@ import ua.edu.ukma.hibskyi.messenger.service.MessageService;
 public class ChatPageController {
 
     private AuthService authService;
+    private UserService userService;
     private ChatService chatService;
-    private MessageService messageService;
 
     @GetMapping
     public String chats(@RequestParam(name = "chat", required = false) String selectedChat, Model model) {
-        UserResponse currentUser = authService.getAuthenticatedUser();
-        model.addAttribute("currentUser", currentUser);
-        model.addAttribute("chats", chatService.getByUser(currentUser.getId()));
-
+        String currentUserId = authService.getAuthenticatedUserId();
+        model.addAttribute("currentUser", userService.getByIdWithChats(currentUserId));
         if (selectedChat != null) {
-            model.addAttribute("activeChat", chatService.getById(selectedChat));
-            model.addAttribute("activeChatMessages", messageService.getByChatId(selectedChat));
+            model.addAttribute("activeChat", chatService.getByIdWithMessages(selectedChat));
         }
-
         return "chat";
     }
 }

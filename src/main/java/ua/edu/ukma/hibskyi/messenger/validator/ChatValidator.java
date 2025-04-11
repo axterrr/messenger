@@ -34,7 +34,7 @@ public class ChatValidator extends BaseValidatorImpl<ChatEntity, ChatView, Strin
 
     @Override
     protected void validatePermissionForView(ChatEntity entity) {
-        String currentUserId = authService.getAuthenticatedUser().getId();
+        String currentUserId = authService.getAuthenticatedUserId();
         if (entity.getUsers().stream().noneMatch(u -> u.getId().equals(currentUserId))) {
             throw new ForbiddenException();
         }
@@ -47,14 +47,14 @@ public class ChatValidator extends BaseValidatorImpl<ChatEntity, ChatView, Strin
 
     @Override
     protected void validatePermissionForUpdate(ChatEntity entity) {
-        if (!entity.getOwner().getId().equals(authService.getAuthenticatedUser().getId())) {
+        if (!entity.getOwner().getId().equals(authService.getAuthenticatedUserId())) {
             throw new ForbiddenException();
         }
     }
 
     @Override
     protected void validatePermissionForDelete(ChatEntity entity) {
-        if (!entity.getOwner().getId().equals(authService.getAuthenticatedUser().getId())) {
+        if (!entity.getOwner().getId().equals(authService.getAuthenticatedUserId())) {
             throw new ForbiddenException();
         }
     }

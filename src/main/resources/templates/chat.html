@@ -17,7 +17,7 @@
       </div>
 
       <div class="chats">
-        <div th:each="chat : ${chats}" class="chat-list-item">
+        <div th:each="chat : ${currentUser.chats}" class="chat-list-item">
           <a th:classappend="${activeChat != null and activeChat.id == chat.id} ? 'active'"
              th:href="@{/(chat=${chat.id})}" th:text="${chat.name}"></a>
         </div>
@@ -32,16 +32,16 @@
         </div>
 
         <div class="message-box" id="messages">
-          <div th:each="message, iterStat : ${activeChatMessages}"
+          <div th:each="message, iterStat : ${activeChat.messages}"
                th:classappend="${message.sender.username == currentUser.username} ? 'message-wrapper from-user' : 'message-wrapper from-other'">
 
-            <div th:if="${iterStat.index == 0} or ${#temporals.format(message.sentAt, 'ddMMyyyy') != #temporals.format(activeChatMessages[iterStat.index - 1].sentAt, 'ddMMyyyy')}"
+            <div th:if="${iterStat.index == 0} or ${#temporals.format(message.sentAt, 'ddMMyyyy') != #temporals.format(activeChat.messages[iterStat.index - 1].sentAt, 'ddMMyyyy')}"
                  class="date-divider">
               <small th:text="${#temporals.year(message.sentAt) == #temporals.year(#temporals.createToday()) ? #temporals.format(message.sentAt, 'd MMMM') : #temporals.format(message.sentAt, 'd MMMM yyyy')}"></small>
             </div>
 
             <div class="message">
-              <span th:if="${message.sender.username != currentUser.username}" class="username" th:text="${message.sender.username}"></span>
+              <span th:if="${message.sender.username != currentUser.username}" class="username" th:text="${message.sender.name}"></span>
               <div>
                 <span th:text="${message.content}"></span>
                 <small class="text-muted d-block" th:text="${#temporals.format(message.sentAt, 'HH:mm')}"></small>
@@ -49,7 +49,7 @@
             </div>
           </div>
 
-          <div th:if="${activeChatMessages.isEmpty()}" class="text-center text-muted inactive-chat-message">
+          <div th:if="${activeChat.messages.isEmpty()}" class="text-center text-muted inactive-chat-message">
             <h5>Send the first message</h5>
           </div>
         </div>

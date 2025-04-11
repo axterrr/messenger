@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -23,5 +25,5 @@ public class UserResponse {
 
     private String description;
 
-//    private List<ChatResponse> chats;
+    private List<ChatResponse> chats;
 }

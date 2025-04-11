@@ -73,14 +73,14 @@ public class UserValidator extends BaseValidatorImpl<UserEntity, UserView, Strin
 
     @Override
     protected void validatePermissionForUpdate(UserEntity entity) {
-        if (!entity.getId().equals(authService.getAuthenticatedUser().getId())) {
+        if (!entity.getId().equals(authService.getAuthenticatedUserId())) {
             throw new ForbiddenException();
         }
     }
 
     @Override
     protected void validatePermissionForDelete(UserEntity entity) {
-        if (!entity.getId().equals(authService.getAuthenticatedUser().getId())) {
+        if (!entity.getId().equals(authService.getAuthenticatedUserId())) {
             throw new ForbiddenException();
         }
     }

@@ -3,6 +3,7 @@ package ua.edu.ukma.hibskyi.messenger.mapper;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import ua.edu.ukma.hibskyi.messenger.dto.response.ChatResponse;
 import ua.edu.ukma.hibskyi.messenger.dto.response.UserResponse;
 import ua.edu.ukma.hibskyi.messenger.dto.view.UserView;
 import ua.edu.ukma.hibskyi.messenger.entity.UserEntity;
@@ -12,7 +13,6 @@ import ua.edu.ukma.hibskyi.messenger.entity.UserEntity;
 public class UserMapper extends BaseMapperImpl<UserEntity, UserView, UserResponse> {
 
     private PasswordEncoder passwordEncoder;
-//    private ChatMapper chatMapper;
 
     @Override
     public UserEntity mapToEntity(UserView view) {
@@ -43,7 +43,10 @@ public class UserMapper extends BaseMapperImpl<UserEntity, UserView, UserRespons
             .email(entity.getEmail())
             .name(entity.getName())
             .description(entity.getDescription())
-//            .chats(mapIfInitialized(entity.getChats(), chatMapper::mapToResponse))
+            .chats(mapIfInitialized(entity.getChats(), chat -> ChatResponse.builder()
+                .id(chat.getId())
+                .name(chat.getName())
+                .build()))
             .build();
     }
 }

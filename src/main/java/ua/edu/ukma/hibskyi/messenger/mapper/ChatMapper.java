@@ -3,6 +3,8 @@ package ua.edu.ukma.hibskyi.messenger.mapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ua.edu.ukma.hibskyi.messenger.dto.response.ChatResponse;
+import ua.edu.ukma.hibskyi.messenger.dto.response.MessageResponse;
+import ua.edu.ukma.hibskyi.messenger.dto.response.UserResponse;
 import ua.edu.ukma.hibskyi.messenger.dto.view.ChatView;
 import ua.edu.ukma.hibskyi.messenger.entity.ChatEntity;
 import ua.edu.ukma.hibskyi.messenger.entity.UserEntity;
@@ -15,8 +17,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ChatMapper extends BaseMapperImpl<ChatEntity, ChatView, ChatResponse> {
 
-//    private MessageMapper messageMapper;
-    private UserMapper userMapper;
     private AuthService authService;
 
     @Override
@@ -25,7 +25,7 @@ public class ChatMapper extends BaseMapperImpl<ChatEntity, ChatView, ChatRespons
             return null;
         }
 
-        UserEntity currentUser = UserEntity.builder().id(authService.getAuthenticatedUser().getId()).build();
+        UserEntity currentUser = UserEntity.builder().id(authService.getAuthenticatedUserId()).build();
         List<UserEntity> userList = new ArrayList<>();
         userList.add(currentUser);
         if (view.getUsersIds() != null) {
@@ -50,9 +50,29 @@ public class ChatMapper extends BaseMapperImpl<ChatEntity, ChatView, ChatRespons
         return ChatResponse.builder()
             .id(entity.getId())
             .name(entity.getName())
-//            .messages(mapIfInitialized(entity.getMessages(), messageMapper::mapToResponse))
-//            .users(mapIfInitialized(entity.getUsers(), userMapper::mapToResponse))
-            .owner(userMapper.mapToResponse(entity.getOwner()))
+            .messages(mapIfInitialized(entity.getMessages(), message -> MessageResponse.builder()
+                .id(message.getId())
+                .content(message.getContent())
+                .sentAt(message.getSentAt())
+                .sender(mapUserToResponse(message.getSender()))
+                .build()))
+            .users(mapIfInitialized(entity.getUsers(), this::mapUserToResponse))
+            .owner(mapUserToResponse(entity.getOwner()))
+            .build();
+    }
+
+    private UserResponse mapUserToResponse(UserEntity user) {
+        if (user == null) {
+            return null;
+        }
+
+        return UserResponse.builder()
+            .id(user.getId())
+            .username(user.getUsername())
+            .phone(user.getPhone())
+            .email(user.getEmail())
+            .name(user.getName())
+            .description(user.getDescription())
             .build();
     }
 }
