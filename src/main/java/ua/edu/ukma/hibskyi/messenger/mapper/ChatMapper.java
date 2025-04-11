@@ -9,6 +9,8 @@ import ua.edu.ukma.hibskyi.messenger.dto.view.ChatView;
 import ua.edu.ukma.hibskyi.messenger.entity.ChatEntity;
 import ua.edu.ukma.hibskyi.messenger.entity.MessageEntity;
 import ua.edu.ukma.hibskyi.messenger.entity.UserEntity;
+import ua.edu.ukma.hibskyi.messenger.exception.NotFoundException;
+import ua.edu.ukma.hibskyi.messenger.repository.UserRepository;
 import ua.edu.ukma.hibskyi.messenger.service.AuthService;
 
 import java.util.ArrayList;
@@ -19,16 +21,16 @@ import java.util.List;
 public class ChatMapper implements BaseMapper<ChatEntity, ChatView, ChatResponse> {
 
     private AuthService authService;
+    private UserRepository userRepository;
 
     @Override
     public ChatEntity mapToEntity(ChatView view) {
         if (view == null) { return null; }
         List<UserEntity> users = new ArrayList<>();
-        MapperUtils.ifNotNull(view.getUsersIds(), ids -> users.addAll(ids.stream()
-            .map(MapperUtils::userEntityFromId)
-            .toList()));
+        MapperUtils.ifNotNull(view.getUsersIds(), ids -> users.addAll(userRepository.findAllById(ids)));
 
-        UserEntity currentUser = MapperUtils.userEntityFromId(authService.getAuthenticatedUserId());
+        UserEntity currentUser = userRepository.findById(authService.getAuthenticatedUserId())
+                .orElseThrow(() -> new NotFoundException("Unknown user"));
         users.add(currentUser);
 
         return ChatEntity.builder()
@@ -44,9 +46,7 @@ public class ChatMapper implements BaseMapper<ChatEntity, ChatView, ChatResponse
         MapperUtils.ifNotNull(view.getName(), entity::setName);
 
         ArrayList<UserEntity> users = new ArrayList<>(entity.getUsers());
-        MapperUtils.ifNotNull(view.getUsersIds(), ids -> users.addAll(ids.stream()
-            .map(MapperUtils::userEntityFromId)
-            .toList()));
+        MapperUtils.ifNotNull(view.getUsersIds(), ids -> users.addAll(userRepository.findAllById(ids)));
         entity.setUsers(users);
     }
 

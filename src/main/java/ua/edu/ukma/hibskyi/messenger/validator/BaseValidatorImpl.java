@@ -3,16 +3,14 @@ package ua.edu.ukma.hibskyi.messenger.validator;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import ua.edu.ukma.hibskyi.messenger.entity.Identifiable;
 import ua.edu.ukma.hibskyi.messenger.exception.ForbiddenException;
 import ua.edu.ukma.hibskyi.messenger.exception.ValidationException;
-import ua.edu.ukma.hibskyi.messenger.entity.Identifiable;
 import ua.edu.ukma.hibskyi.messenger.service.AuthService;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Transactional
 public abstract class BaseValidatorImpl<ENTITY extends Identifiable<ID>, VIEW, ID> implements BaseValidator<ENTITY, VIEW> {
 
     @Autowired

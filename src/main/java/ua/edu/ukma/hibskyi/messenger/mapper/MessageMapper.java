@@ -9,6 +9,9 @@ import ua.edu.ukma.hibskyi.messenger.dto.view.MessageView;
 import ua.edu.ukma.hibskyi.messenger.entity.ChatEntity;
 import ua.edu.ukma.hibskyi.messenger.entity.MessageEntity;
 import ua.edu.ukma.hibskyi.messenger.entity.UserEntity;
+import ua.edu.ukma.hibskyi.messenger.exception.NotFoundException;
+import ua.edu.ukma.hibskyi.messenger.repository.ChatRepository;
+import ua.edu.ukma.hibskyi.messenger.repository.UserRepository;
 import ua.edu.ukma.hibskyi.messenger.service.AuthService;
 
 @Component
@@ -16,14 +19,18 @@ import ua.edu.ukma.hibskyi.messenger.service.AuthService;
 public class MessageMapper implements BaseMapper<MessageEntity, MessageView, MessageResponse> {
 
     private AuthService authService;
+    private UserRepository userRepository;
+    private ChatRepository chatRepository;
 
     @Override
     public MessageEntity mapToEntity(MessageView view) {
         if (view == null) { return null; }
         return MessageEntity.builder()
             .content(view.getContent())
-            .chat(MapperUtils.chatEntityFromId(view.getChatId()))
-            .sender(MapperUtils.userEntityFromId(authService.getAuthenticatedUserId()))
+            .chat(chatRepository.findById(view.getChatId())
+                    .orElseThrow(() -> new NotFoundException("Unknown chat")))
+            .sender(userRepository.findById(authService.getAuthenticatedUserId())
+                    .orElseThrow(() -> new NotFoundException("Unknown user")))
             .build();
     }
 

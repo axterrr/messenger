@@ -1,6 +1,5 @@
 package ua.edu.ukma.hibskyi.messenger.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,11 +37,11 @@ public class ChatEntity implements Identifiable<String> {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "owner_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
     private UserEntity owner;
 
-    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "chat")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OrderBy("sentAt ASC")

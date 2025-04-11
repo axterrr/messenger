@@ -49,13 +49,14 @@
             </div>
           </div>
 
-          <div th:if="${activeChat.messages.isEmpty()}" class="text-center text-muted inactive-chat-message">
+          <div th:if="${activeChat.messages.isEmpty()}" class="text-center text-muted inactive-chat-message" id="empty-chat-placeholder">
             <h5>Send the first message</h5>
           </div>
         </div>
 
         <div id="send-message-error" class="text-danger" style="display: none;"></div>
         <form class="d-flex message-form" id="send-message-form">
+          <input type="hidden" id="send-message-form-current-username" th:value="${currentUser.username}"/>
           <input type="hidden" id="send-message-form-chat-id" th:value="${activeChat.id}"/>
           <input type="text" id="send-message-form-content" class="form-control me-2" placeholder="Enter the message..." required/>
           <button type="submit" class="btn btn-primary">Send</button>
@@ -71,6 +72,8 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 <script src="/js/chat.js"></script>
 </body>
 </html>

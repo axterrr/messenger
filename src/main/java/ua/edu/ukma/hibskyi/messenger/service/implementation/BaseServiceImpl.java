@@ -1,17 +1,15 @@
 package ua.edu.ukma.hibskyi.messenger.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import ua.edu.ukma.hibskyi.messenger.entity.Identifiable;
 import ua.edu.ukma.hibskyi.messenger.exception.NotFoundException;
 import ua.edu.ukma.hibskyi.messenger.mapper.BaseMapper;
-import ua.edu.ukma.hibskyi.messenger.entity.Identifiable;
 import ua.edu.ukma.hibskyi.messenger.repository.BaseRepository;
 import ua.edu.ukma.hibskyi.messenger.service.BaseService;
 import ua.edu.ukma.hibskyi.messenger.validator.BaseValidator;
 
 import java.util.List;
 
-@Transactional
 public abstract class BaseServiceImpl<ENTITY extends Identifiable<ID>, VIEW, RESPONSE, ID>
         implements BaseService<VIEW, RESPONSE, ID> {
 
@@ -42,7 +40,8 @@ public abstract class BaseServiceImpl<ENTITY extends Identifiable<ID>, VIEW, RES
     public ID create(VIEW view) {
         validator.validateForCreate(view);
         ENTITY entity = mapper.mapToEntity(view);
-        return repository.save(entity).getId();
+        repository.saveAndFlush(entity);
+        return entity.getId();
     }
 
     @Override
@@ -50,7 +49,7 @@ public abstract class BaseServiceImpl<ENTITY extends Identifiable<ID>, VIEW, RES
         ENTITY entity = getEntityById(id);
         validator.validateForUpdate(view, entity);
         mapper.merge(view, entity);
-        repository.save(entity);
+        repository.saveAndFlush(entity);
     }
 
     @Override

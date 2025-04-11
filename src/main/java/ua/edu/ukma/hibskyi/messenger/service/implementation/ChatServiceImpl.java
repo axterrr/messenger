@@ -3,12 +3,14 @@ package ua.edu.ukma.hibskyi.messenger.service.implementation;
 import lombok.AllArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.edu.ukma.hibskyi.messenger.dto.response.ChatResponse;
 import ua.edu.ukma.hibskyi.messenger.dto.view.ChatView;
 import ua.edu.ukma.hibskyi.messenger.entity.ChatEntity;
 import ua.edu.ukma.hibskyi.messenger.service.ChatService;
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class ChatServiceImpl extends BaseServiceImpl<ChatEntity, ChatView, ChatResponse, String> implements ChatService {
 

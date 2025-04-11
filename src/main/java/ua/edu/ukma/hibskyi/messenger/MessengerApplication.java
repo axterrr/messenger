@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 // TODO:
 //  - add thymeleaf and views controllers
-//  - AJAX
+//  - WebSocket for updating/deleting and for chats
 
 @SpringBootApplication
 public class MessengerApplication {

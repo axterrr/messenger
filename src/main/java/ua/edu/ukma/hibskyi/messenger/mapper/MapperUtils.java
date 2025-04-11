@@ -1,9 +1,6 @@
 package ua.edu.ukma.hibskyi.messenger.mapper;
 
 import org.hibernate.Hibernate;
-import ua.edu.ukma.hibskyi.messenger.entity.ChatEntity;
-import ua.edu.ukma.hibskyi.messenger.entity.MessageEntity;
-import ua.edu.ukma.hibskyi.messenger.entity.UserEntity;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,17 +21,5 @@ public class MapperUtils {
         if (value != null) {
             consumer.accept(value);
         }
-    }
-
-    public static UserEntity userEntityFromId(String id) {
-        return UserEntity.builder().id(id).build();
-    }
-
-    public static ChatEntity chatEntityFromId(String id) {
-        return ChatEntity.builder().id(id).build();
-    }
-
-    public static MessageEntity messageEntityFromId(String id) {
-        return MessageEntity.builder().id(id).build();
     }
 }
