@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -17,7 +18,11 @@ public class ChatResponse {
 
     private String name;
 
+    private LocalDateTime lastActionAt;
+
     private UserResponse owner;
+
+    private MessageResponse lastMessage;
 
     private List<MessageResponse> messages;
 

@@ -10,15 +10,20 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -37,14 +42,25 @@ public class ChatEntity implements Identifiable<String> {
     @Column(name = "name")
     private String name;
 
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "last_action_at")
+    private LocalDateTime lastActionAt;
+
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private UserEntity owner;
 
-    @OneToMany(mappedBy = "chat")
+    @OneToOne
+    @JoinColumn(name = "last_message_id")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OrderBy("sentAt ASC")
+    private MessageEntity lastMessage;
+
+    @OneToMany(mappedBy = "chat")
+    @OrderBy("sentAt asc")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<MessageEntity> messages;
 
     @ManyToMany

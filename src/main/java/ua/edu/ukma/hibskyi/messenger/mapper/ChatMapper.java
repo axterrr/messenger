@@ -57,6 +57,8 @@ public class ChatMapper implements BaseMapper<ChatEntity, ChatView, ChatResponse
             .id(entity.getId())
             .name(entity.getName())
             .messages(MapperUtils.mapIfInitialized(entity.getMessages(), this::mapMessageToResponse))
+            .lastActionAt(entity.getLastActionAt())
+            .lastMessage(mapMessageToResponse(entity.getLastMessage()))
             .users(MapperUtils.mapIfInitialized(entity.getUsers(), this::mapUserToResponse))
             .owner(mapUserToResponse(entity.getOwner()))
             .build();

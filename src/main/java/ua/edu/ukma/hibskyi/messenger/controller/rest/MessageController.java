@@ -3,7 +3,6 @@ package ua.edu.ukma.hibskyi.messenger.controller.rest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +23,6 @@ import java.util.List;
 public class MessageController {
 
     private MessageService messageService;
-    private SimpMessagingTemplate messagingTemplate;
 
     @GetMapping
     public ResponseEntity<List<MessageResponse>> getAllMessages() {
@@ -38,9 +36,7 @@ public class MessageController {
 
     @PostMapping
     public ResponseEntity<String> createMessage(@RequestBody MessageView message) {
-        String id = messageService.create(message);
-        messagingTemplate.convertAndSend("/topic/chat/" + message.getChatId(), messageService.getById(id));
-        return new ResponseEntity<>(id, HttpStatus.CREATED);
+        return new ResponseEntity<>(messageService.create(message), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

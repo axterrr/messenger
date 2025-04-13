@@ -57,6 +57,8 @@ public class MessageMapper implements BaseMapper<MessageEntity, MessageView, Mes
         return ChatResponse.builder()
             .id(chat.getId())
             .name(chat.getName())
+            .lastActionAt(chat.getLastActionAt())
+            .lastMessage(mapMessageToResponse(chat.getLastMessage()))
             .build();
     }
 
@@ -69,6 +71,15 @@ public class MessageMapper implements BaseMapper<MessageEntity, MessageView, Mes
             .email(user.getEmail())
             .name(user.getName())
             .description(user.getDescription())
+            .build();
+    }
+
+    private MessageResponse mapMessageToResponse(MessageEntity message) {
+        if (message == null) { return null; }
+        return MessageResponse.builder()
+            .id(message.getId())
+            .content(message.getContent())
+            .sentAt(message.getSentAt())
             .build();
     }
 }

@@ -38,10 +38,7 @@ public abstract class BaseServiceImpl<ENTITY extends Identifiable<ID>, VIEW, RES
 
     @Override
     public ID create(VIEW view) {
-        validator.validateForCreate(view);
-        ENTITY entity = mapper.mapToEntity(view);
-        repository.saveAndFlush(entity);
-        return entity.getId();
+        return createEntity(view).getId();
     }
 
     @Override
@@ -57,6 +54,12 @@ public abstract class BaseServiceImpl<ENTITY extends Identifiable<ID>, VIEW, RES
         ENTITY entity = getEntityById(id);
         validator.validateForDelete(entity);
         repository.deleteById(id);
+    }
+
+    protected ENTITY createEntity(VIEW view) {
+        validator.validateForCreate(view);
+        ENTITY entity = mapper.mapToEntity(view);
+        return repository.saveAndFlush(entity);
     }
 
     protected ENTITY getEntityById(ID id) {
