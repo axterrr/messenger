@@ -4,71 +4,14 @@ html, body {
     background-color: #e9ecef;
 }
 
-.chat-body {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
 .chat-container {
     height: 100vh;
 }
 
-.chat-list-header {
-    min-height: 80px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding-left: 20px;
-    border-bottom: 1px solid #dee2e6;
-}
-
-.chat-list {
-    background-color: #fff;
-    border-right: 1px solid #dee2e6;
-    max-height: 100vh;
-}
-
-.chat-list-item {
-    height: 100px;
-    border-bottom: 1px solid #dee2e6;
-}
-
-.chats {
-    overflow-y: auto;
-}
-
-.chat-link {
-    height: 100%;
-    width: 100%;
+.chat-body {
     display: flex;
     flex-direction: column;
-    justify-content: start;
-    align-items: flex-start;
-    text-decoration: none;
-    color: #212529;
-    padding: 12px 20px;
-    overflow: hidden;
-}
-
-.chat-name {
-    font-size: 1rem;
-    margin-bottom: 4px;
-}
-
-.chat-preview {
-    font-size: 0.875rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-}
-
-.chat-list .active {
-    background-color: #ceecff;
-}
-
-.chat-body {
+    height: 100%;
     max-height: 100vh;
 }
 

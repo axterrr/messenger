@@ -23,6 +23,6 @@ public class RestControllerExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
-        return new ResponseEntity<>(new ErrorResponse(404, "Unexpected exception", ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(new ErrorResponse(500, "Unexpected exception", ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

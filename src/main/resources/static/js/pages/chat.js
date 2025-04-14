@@ -1,8 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const messageBox = document.getElementById('messages');
-    messageBox.scrollTop = messageBox.scrollHeight;
-    document.getElementById("send-message-form").addEventListener('submit', processSendFormSubmit);
-    connect();
+    if (activeChatId) {
+        const messageBox = document.getElementById('messages');
+        messageBox.scrollTop = messageBox.scrollHeight;
+        document.getElementById("send-message-form").addEventListener('submit', processSendFormSubmit);
+        connectToChatWebSocket();
+    }
 });
 
 function processSendFormSubmit(e) {
@@ -10,7 +12,7 @@ function processSendFormSubmit(e) {
 
     const message = {
         content: document.getElementById('send-message-form-content').value,
-        chatId: document.getElementById('send-message-form-chat-id').value,
+        chatId: activeChatId,
     };
 
     fetch('/api/message', {
@@ -40,40 +42,15 @@ function processSendFormSubmit(e) {
         });
 }
 
-function connect() {
-    let stompClient = null;
+function connectToChatWebSocket() {
     const socket = new SockJS('/chat-websocket');
-    stompClient = Stomp.over(socket);
-    const chatId = document.getElementById('send-message-form-chat-id').value;
-    const currentUserUsername = document.getElementById('send-message-form-current-username').value;
+    const stompClient = Stomp.over(socket);
     stompClient.connect({}, function () {
-        stompClient.subscribe('/topic/chat/' + chatId, function (messageOutput) {
+        stompClient.subscribe('/topic/chat/' + activeChatId, function (messageOutput) {
             const message = JSON.parse(messageOutput.body);
             showMessage(message);
         });
-        stompClient.subscribe('/topic/user/' + currentUserUsername, function (messageOutput) {
-            const message = JSON.parse(messageOutput.body);
-            addChat(message);
-        });
     });
-}
-
-function addChat(message) {
-    const chat = message.chat;
-    let div = document.getElementById(chat.id);
-    div.remove();
-    const chatId = document.getElementById('send-message-form-chat-id').value;
-    const currentUsername = document.getElementById('send-message-form-current-username').value;
-    div.innerHTML = `
-        <a class="${chatId === chat.id ? 'active' : ''} chat-link flex-column justify-content-around" href="/chat=${chat.id}">
-            <span class="chat-name fw-bold">${chat.name}</span>
-            <small class="chat-preview text-muted">
-                ${(message.sender.username === currentUsername ? 'You: ' : message.sender.name + ': ') + message.content}
-            </small>
-          </a>
-    `
-    const chatList = document.getElementById('chat-list');
-    chatList.insertBefore(div, chatList.firstChild);
 }
 
 function showMessage(message) {
@@ -95,7 +72,6 @@ function showMessage(message) {
         `;
     }
 
-    const currentUsername = document.getElementById('send-message-form-current-username').value;
     div.classList.add('message-wrapper', message.sender.username === currentUsername ? 'from-user' : 'from-other');
     div.innerHTML += `
         <div class="message">

@@ -1,0 +1,27 @@
+<link rel="stylesheet" href="/css/components/side-bar.css">
+<script src="/js/components/side-bar.js"></script>
+
+<div class="side-bar d-flex flex-column">
+  <div class="chat-list-header">
+    <h4>Your chats</h4>
+  </div>
+
+  <div class="chats" id="chat-list">
+    <div th:each="chat : ${currentUser.chats}" th:id="${chat.id}" class="chat-list-item">
+      <a th:classappend="${activeChat != null and activeChat.id == chat.id} ? 'active'"
+         th:href="@{/(chat=${chat.id})}" class="chat-link flex-column justify-content-around">
+        <span th:text="${chat.name}" class="chat-name fw-bold"></span>
+        <small class="chat-preview text-muted"
+               th:text="${chat.lastMessage != null ?
+                   ((chat.lastMessage.sender.username == currentUser.username ? 'You: ' : chat.lastMessage.sender.name + ': ') + chat.lastMessage.content)
+                   : 'No messages yet'}"></small>
+      </a>
+    </div>
+  </div>
+
+  <div class="chat-list-footer">
+    <a href="/people">people</a>
+    <a href="/" class="active">chats</a>
+    <a href="/settings">settings</a>
+  </div>
+</div>

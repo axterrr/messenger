@@ -4,33 +4,18 @@
   <meta charset="UTF-8">
   <title>Messenger</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/chat.css">
+  <link rel="stylesheet" href="/css/pages/chat.css">
 </head>
 <body>
 
 <div class="container-fluid">
   <div class="row chat-container shadow-lg">
 
-    <div class="col-md-3 p-0 chat-list d-flex flex-column">
-      <div class="chat-list-header">
-        <h4>Your chats</h4>
-      </div>
+    <div class="col-md-2 p-0"
+         th:insert="~{components/side-bar.html}"
+         th:with="currentUser=${currentUser}, activeChat=${activeChat}"></div>
 
-      <div class="chats" id="chat-list">
-        <div th:each="chat : ${currentUser.chats}" th:id="${chat.id}" class="chat-list-item">
-          <a th:classappend="${activeChat != null and activeChat.id == chat.id} ? 'active'"
-             th:href="@{/(chat=${chat.id})}" class="chat-link flex-column justify-content-around">
-            <span th:text="${chat.name}" class="chat-name fw-bold"></span>
-            <small class="chat-preview text-muted"
-                   th:text="${chat.lastMessage != null ?
-                   ((chat.lastMessage.sender.username == currentUser.username ? 'You: ' : chat.lastMessage.sender.name + ': ') + chat.lastMessage.content)
-                   : 'No messages yet'}"></small>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-9 p-0 bg-white">
+    <div class="col-md-10 p-0 bg-white">
       <div th:if="${activeChat != null}" class="chat-body d-flex flex-column h-100">
 
         <div class="chat-header">
@@ -62,8 +47,6 @@
 
         <div id="send-message-error" class="text-danger" style="display: none;"></div>
         <form class="d-flex message-form" id="send-message-form">
-          <input type="hidden" id="send-message-form-current-username" th:value="${currentUser.username}"/>
-          <input type="hidden" id="send-message-form-chat-id" th:value="${activeChat.id}"/>
           <input type="text" id="send-message-form-content" class="form-control me-2" placeholder="Enter the message..." required/>
           <button type="submit" class="btn btn-primary">Send</button>
         </form>
@@ -80,6 +63,10 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
-<script src="/js/chat.js"></script>
+<script th:inline="javascript">
+  const currentUsername = /*[[${currentUser?.username}]]*/ null;
+  const activeChatId = /*[[${activeChat?.id}]]*/ null;
+</script>
+<script src="/js/pages/chat.js"></script>
 </body>
 </html>

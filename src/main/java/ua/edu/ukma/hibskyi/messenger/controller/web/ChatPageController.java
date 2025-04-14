@@ -26,6 +26,6 @@ public class ChatPageController {
         if (selectedChat != null) {
             model.addAttribute("activeChat", chatService.getByIdWithMessages(selectedChat));
         }
-        return "chat";
+        return "pages/chat";
     }
 }
