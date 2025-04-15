@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById("register-user-form").addEventListener('submit', onRegisterUserFormSubmit);
+    document.getElementById("edit-user-form").addEventListener('submit', onRegisterUserFormSubmit);
 });
 
 function onRegisterUserFormSubmit(e) {
@@ -11,12 +11,10 @@ function onRegisterUserFormSubmit(e) {
         email: document.getElementById('email').value,
         name: document.getElementById('name').value,
         description: document.getElementById('description').value,
-        password: document.getElementById('password').value,
-        confirmPassword: document.getElementById('confirmPassword').value,
     };
 
-    fetch('/api/user', {
-        method: 'POST',
+    fetch(`/api/user/${currentUserId}`, {
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -26,7 +24,7 @@ function onRegisterUserFormSubmit(e) {
             if (!response.ok) {
                 return response.json().then(error => { throw error })
             } else {
-                location.href = "/auth/login"
+                location.href = "/settings/profile"
             }
         })
         .catch(error => {

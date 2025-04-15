@@ -3,6 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const messageBox = document.getElementById('messages');
         messageBox.scrollTop = messageBox.scrollHeight;
         document.getElementById("send-message-form-content").focus();
+        document.getElementById("send-message-form-content").addEventListener("keydown", function (event) {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                document.getElementById("send-message-form").requestSubmit() ;
+            }
+        });
         document.getElementById("send-message-form").addEventListener('submit', processSendFormSubmit);
         connectToChatWebSocket();
     }
@@ -41,6 +47,8 @@ function processSendFormSubmit(e) {
             });
             errorBox.style.display = 'block';
         });
+
+    document.getElementById("send-message-form-content").focus();
 }
 
 function connectToChatWebSocket() {
@@ -73,10 +81,10 @@ function showMessage(message) {
         `;
     }
 
-    div.classList.add('message-wrapper', message.sender.username === currentUsername ? 'from-user' : 'from-other');
+    div.classList.add('message-wrapper', message.sender.id === currentUserId ? 'from-user' : 'from-other');
     div.innerHTML += `
         <div class="message">
-            ${message.sender.username !== currentUsername ? `<span class="username">${escapeHtml(message.sender.name)}</span>` : ''}
+            ${message.sender.id !== currentUserId ? `<span class="username">${escapeHtml(message.sender.name)}</span>` : ''}
             <div>
                 <span>${escapeHtml(message.content)}</span>
                 <small class="text-muted d-block">${formatTime(message.sentAt)}</small>

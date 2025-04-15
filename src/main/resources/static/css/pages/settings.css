@@ -16,3 +16,24 @@ html, body {
     padding-left: 20px;
     border-bottom: 1px solid #dee2e6;
 }
+
+.profile-section h6 {
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.profile-section p {
+    color: #212529;
+    font-size: 1.25rem;
+}
+
+.profile-section {
+    border-bottom: 1px solid #dee2e6;
+    margin-top: 20px;
+}
+
+.profile-card {
+    max-width: 600px;
+    width: 100%;
+    background-color: #f8f9fa;
+}

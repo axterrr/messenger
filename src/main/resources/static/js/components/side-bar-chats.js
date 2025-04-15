@@ -6,7 +6,7 @@ function connectToUserWebSocket() {
     const socket = new SockJS('/chat-websocket');
     const stompClient = Stomp.over(socket);
     stompClient.connect({}, function () {
-        stompClient.subscribe('/topic/user/' + currentUsername, function (messageOutput) {
+        stompClient.subscribe('/topic/user/' + currentUserId, function (messageOutput) {
             const message = JSON.parse(messageOutput.body);
             addChat(message);
         });
@@ -21,7 +21,7 @@ function addChat(message) {
         <a class="${activeChatId === chat.id ? 'active' : ''} chat-link flex-column justify-content-around" href="/chat=${escapeHtml(chat.id)}">
             <span class="chat-name fw-bold">${escapeHtml(chat.name)}</span>
             <small class="chat-preview text-muted">
-                ${escapeHtml((message.sender.username === currentUsername ? 'You: ' : message.sender.name + ': ') + message.content)}
+                ${escapeHtml((message.sender.id === currentUserId ? 'You: ' : message.sender.name + ': ') + message.content)}
             </small>
           </a>
     `

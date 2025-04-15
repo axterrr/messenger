@@ -24,7 +24,7 @@ public class MessageServiceImpl extends BaseServiceImpl<MessageEntity, MessageVi
         MessageResponse response = mapper.mapToResponse(entity);
         messagingTemplate.convertAndSend("/topic/chat/" + view.getChatId(), response);
         entity.getChat().getUsers().forEach(user ->
-            messagingTemplate.convertAndSend("/topic/user/" + user.getUsername(), response)
+            messagingTemplate.convertAndSend("/topic/user/" + user.getId(), response)
         );
         return entity.getId();
     }

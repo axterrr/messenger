@@ -15,20 +15,44 @@
          th:insert="~{components/side-bar-settings.html}"
          th:with="currentUser=${currentUser}, settingType='profile'"></div>
 
-    <div class="col-md-10 p-0 bg-white">
+      <div class="col-md-10 p-0 bg-white">
+          <div class="setting-header">
+              <h4>My profile</h4>
+          </div>
 
-        <div class="setting-header">
-            <h4>My Profile</h4>
-        </div>
+          <div class="p-0 d-flex justify-content-center align-items-start bg-white">
 
-    </div>
+              <div class="profile-card shadow-sm rounded-4 p-4 mt-4">
+                  <h3 class="text-center" th:text="${currentUser.name}"></h3>
+
+                  <div class="profile-section" th:if="${currentUser.description != null and !currentUser.description.isBlank()}">
+                      <h6 class="text-muted">About</h6>
+                      <p th:text="${currentUser.description}"></p>
+                  </div>
+
+                  <div class="profile-section">
+                      <h6 class="text-muted">Username</h6>
+                      <p th:text="${currentUser.username}"></p>
+                  </div>
+
+                  <div class="profile-section">
+                      <h6 class="text-muted">Phone</h6>
+                      <p th:text="${currentUser.phone}"></p>
+                  </div>
+
+                  <div class="profile-section" th:if="${currentUser.email != null and !currentUser.email.isBlank()}">
+                      <h6 class="text-muted">Email</h6>
+                      <p th:text="${currentUser.email}"></p>
+                  </div>
+
+              </div>
+
+          </div>
+      </div>
 
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script th:inline="javascript">
-    const currentUsername = /*[[${currentUser?.username}]]*/ null;
-</script>
 </body>
 </html>
