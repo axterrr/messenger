@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (activeChatId) {
         const messageBox = document.getElementById('messages');
         messageBox.scrollTop = messageBox.scrollHeight;
+        document.getElementById("send-message-form-content").focus();
         document.getElementById("send-message-form").addEventListener('submit', processSendFormSubmit);
         connectToChatWebSocket();
     }

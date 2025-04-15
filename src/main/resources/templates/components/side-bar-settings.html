@@ -1,0 +1,25 @@
+<link rel="stylesheet" href="/css/components/side-bar-settings.css">
+
+<div class="side-bar d-flex flex-column">
+  <div class="side-bar-header">
+    <h4>Settings</h4>
+  </div>
+
+  <div class="side-bar-content">
+    <div class="settings-item fw-bold" th:classappend="${settingType == 'profile'} ? 'active'">
+      <a class="setting-link" href="/settings/profile">My Profile</a>
+    </div>
+    <div class="settings-item fw-bold" th:classappend="${settingType == 'edit-profile'} ? 'active'">
+      <a class="setting-link" href="/settings/profile/edit">Edit Profile</a>
+    </div>
+    <div class="settings-item fw-bold" th:classappend="${settingType == 'account'} ? 'active'">
+      <a class="setting-link" href="/settings/account">Account</a>
+    </div>
+  </div>
+
+  <div class="side-bar-footer">
+    <a href="/people">people</a>
+    <a href="/">chats</a>
+    <a href="/settings/profile" class="active">settings</a>
+  </div>
+</div>

@@ -86,7 +86,12 @@ html, body {
 }
 
 .message-form {
-    min-height: 50px;
+    height: 50px;
+}
+
+textarea {
+    resize: none;
+    align-content: center;
 }
 
 .inactive-chat-message {

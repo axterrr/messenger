@@ -1,14 +1,14 @@
-<link rel="stylesheet" href="/css/components/side-bar.css">
-<script src="/js/components/side-bar.js"></script>
+<link rel="stylesheet" href="/css/components/side-bar-chats.css">
+<script src="/js/components/side-bar-chats.js"></script>
 
 <div class="side-bar d-flex flex-column">
-  <div class="chat-list-header">
+  <div class="side-bar-header">
     <h4>Your chats</h4>
   </div>
 
-  <div class="chats" id="chat-list">
-    <div th:each="chat : ${currentUser.chats}" th:id="${chat.id}" class="chat-list-item">
-      <a th:classappend="${activeChat != null and activeChat.id == chat.id} ? 'active'"
+  <div class="side-bar-content" id="chat-list">
+    <div th:each="chat : ${currentUser.chats}" th:id="${chat.id}" class="chats-item">
+      <a th:classappend="${activeChat?.id == chat.id} ? 'active'"
          th:href="@{/(chat=${chat.id})}" class="chat-link flex-column justify-content-around">
         <span th:text="${chat.name}" class="chat-name fw-bold"></span>
         <small class="chat-preview text-muted"
@@ -19,9 +19,9 @@
     </div>
   </div>
 
-  <div class="chat-list-footer">
+  <div class="side-bar-footer">
     <a href="/people">people</a>
     <a href="/" class="active">chats</a>
-    <a href="/settings">settings</a>
+    <a href="/settings/profile">settings</a>
   </div>
 </div>
