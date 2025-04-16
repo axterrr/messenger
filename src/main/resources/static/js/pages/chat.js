@@ -19,31 +19,13 @@ function processSendFormSubmit(e) {
         chatId: activeChatId,
     };
 
-    fetch('/api/message', {
+    processRequest(fetch('/api/message', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(message)
-    })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(error => { throw error })
-            } else {
-                document.getElementById('send-message-form-content').value = '';
-            }
-        })
-        .catch(error => {
-            const errorBox = document.getElementById('send-message-error');
-            errorBox.innerHTML = '';
-            error.messages.sort().forEach(msg => {
-                const line = document.createElement('div');
-                line.style.paddingLeft = '10px'
-                line.textContent = msg;
-                errorBox.appendChild(line);
-            });
-            errorBox.style.display = 'block';
-        });
+    }), () => document.getElementById('send-message-form-content').value = '');
 
     document.getElementById("send-message-form-content").focus();
 }
@@ -55,6 +37,10 @@ function connectToChatWebSocket() {
         stompClient.subscribe('/topic/chat/' + activeChatId, function (messageOutput) {
             const message = JSON.parse(messageOutput.body);
             showMessage(message);
+        });
+        stompClient.subscribe('/topic/chat/delete/' + activeChatId, function (messageOutput) {
+            const messageId = messageOutput.body;
+            removeMessage(messageId);
         });
     });
 }
@@ -92,6 +78,7 @@ function showMessage(message) {
     `;
     messagesDiv.appendChild(div);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    div.getElementsByClassName("around-message")[0].addEventListener('contextmenu', onContextMenu);
 }
 
 function formatTime(isoString) {
@@ -156,5 +143,40 @@ function editMessage(messageId) {
 }
 
 function deleteMessage(messageId) {
-    console.log("deleting "+messageId)
+    if (!confirm("Are you sure you want to delete the message?")) return;
+    processRequest(fetch(`/api/message/${messageId}`, {
+        method: 'DELETE',
+    }), () => {});
+}
+
+function removeMessage(messageId) {
+    let wrapper = document.getElementById(messageId).parentElement.parentElement;
+    let divider = wrapper.getElementsByClassName("date-divider")[0];
+    let next = wrapper.nextElementSibling;
+    if (divider && next && !next.firstElementChild.classList.contains("date-divider")) {
+        next.insertBefore(divider, next.firstChild);
+    }
+    wrapper.remove();
+}
+
+function processRequest(request, onSuccess) {
+    request
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(error => { throw error })
+            } else {
+                onSuccess();
+            }
+        })
+        .catch(error => {
+            const errorBox = document.getElementById('send-message-error');
+            errorBox.innerHTML = '';
+            error.messages.sort().forEach(msg => {
+                const line = document.createElement('div');
+                line.style.paddingLeft = '10px'
+                line.textContent = msg;
+                errorBox.appendChild(line);
+            });
+            errorBox.style.display = 'block';
+        });
 }

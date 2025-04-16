@@ -31,7 +31,7 @@ public abstract class BaseServiceImpl<ENTITY extends Identifiable<ID>, VIEW, RES
 
     @Override
     public RESPONSE getById(ID id) {
-        ENTITY entity = getEntityById(id);
+        ENTITY entity = getEntity(id);
         validator.validateForView(entity);
         return mapper.mapToResponse(entity);
     }
@@ -43,7 +43,7 @@ public abstract class BaseServiceImpl<ENTITY extends Identifiable<ID>, VIEW, RES
 
     @Override
     public void update(ID id, VIEW view) {
-        ENTITY entity = getEntityById(id);
+        ENTITY entity = getEntity(id);
         validator.validateForUpdate(view, entity);
         mapper.merge(view, entity);
         repository.saveAndFlush(entity);
@@ -51,9 +51,7 @@ public abstract class BaseServiceImpl<ENTITY extends Identifiable<ID>, VIEW, RES
 
     @Override
     public void deleteById(ID id) {
-        ENTITY entity = getEntityById(id);
-        validator.validateForDelete(entity);
-        repository.deleteById(id);
+        deleteEntity(id);
     }
 
     protected ENTITY createEntity(VIEW view) {
@@ -62,7 +60,14 @@ public abstract class BaseServiceImpl<ENTITY extends Identifiable<ID>, VIEW, RES
         return repository.saveAndFlush(entity);
     }
 
-    protected ENTITY getEntityById(ID id) {
+    protected ENTITY deleteEntity(ID id) {
+        ENTITY entity = getEntity(id);
+        validator.validateForDelete(entity);
+        repository.deleteById(entity.getId());
+        return entity;
+    }
+
+    protected ENTITY getEntity(ID id) {
         return repository.findById(id)
             .orElseThrow(() -> new NotFoundException("Entity with such id was not found"));
     }

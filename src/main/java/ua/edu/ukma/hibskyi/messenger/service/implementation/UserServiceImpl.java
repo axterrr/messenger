@@ -16,7 +16,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, UserView, UserR
 
     @Override
     public UserResponse getByIdWithChats(String id) {
-        UserEntity entity = getEntityById(id);
+        UserEntity entity = getEntity(id);
         validator.validateForView(entity);
         Hibernate.initialize(entity.getChats());
         return mapper.mapToResponse(entity);

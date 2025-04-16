@@ -16,7 +16,7 @@ public class ChatServiceImpl extends BaseServiceImpl<ChatEntity, ChatView, ChatR
 
     @Override
     public ChatResponse getByIdWithMessages(String id) {
-        ChatEntity entity = getEntityById(id);
+        ChatEntity entity = getEntity(id);
         validator.validateForView(entity);
         Hibernate.initialize(entity.getMessages());
         return mapper.mapToResponse(entity);

@@ -10,6 +10,10 @@ function connectToUserWebSocket() {
             const message = JSON.parse(messageOutput.body);
             addChat(message);
         });
+        stompClient.subscribe('/topic/user/update-last-message/' + currentUserId, function (messageOutput) {
+            const message = JSON.parse(messageOutput.body);
+            updateLastMessage(message);
+        });
     });
 }
 
@@ -27,6 +31,15 @@ function addChat(message) {
     `
     const chatList = document.getElementById('chat-list');
     chatList.insertBefore(div, chatList.firstChild);
+}
+
+function updateLastMessage(message) {
+    let small = document.getElementById(message.chat.id).getElementsByTagName('small')[0];
+    if (message.content) {
+        small.textContent = escapeHtml((message.sender.id === currentUserId ? 'You: ' : message.sender.name + ': ') + message.content);
+    } else {
+        small.textContent = 'No messages yet';
+    }
 }
 
 function escapeHtml(text) {
