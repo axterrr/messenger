@@ -16,45 +16,48 @@
              th:with="currentUser=${currentUser}, settingType='edit-profile'"></div>
 
         <div class="col-md-10 p-0 bg-white">
+            <div class="settings-body d-flex flex-column h-100">
 
-            <div class="setting-header">
-                <h4>Edit Profile</h4>
-            </div>
+                <div class="setting-header">
+                    <h4>Edit Profile</h4>
+                </div>
 
-            <div class="p-0 d-flex justify-content-center align-items-start bg-white">
-                <form id="edit-user-form" class="profile-card shadow-sm rounded-4 p-4 mt-4">
+                <div class="p-0 d-flex justify-content-center align-items-start bg-white settings-content">
+                    <form id="edit-user-form" class="profile-card shadow-sm rounded-4 p-4 mt-4">
 
-                    <div class="profile-section mt-0">
-                        <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" th:value="${currentUser.name}" required/>
-                    </div>
+                        <div class="profile-section mt-0">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" th:value="${currentUser.name}" required/>
+                        </div>
 
-                    <div class="profile-section">
-                        <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" th:text="${currentUser.description}" style="resize: none"></textarea>
-                    </div>
+                        <div class="profile-section">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" th:text="${currentUser.description}" style="resize: none"></textarea>
+                        </div>
 
-                    <div class="profile-section">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" th:value="${currentUser.username}" required/>
-                    </div>
+                        <div class="profile-section">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" th:value="${currentUser.username}" required/>
+                        </div>
 
-                    <div class="profile-section">
-                        <label for="phone" class="form-label">Phone</label>
-                        <input type="text" id="phone" class="form-control" th:value="${currentUser.phone}" required/>
-                    </div>
+                        <div class="profile-section">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="text" id="phone" class="form-control" th:value="${currentUser.phone}" required/>
+                        </div>
 
-                    <div class="profile-section">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" th:value="${currentUser.email}">
-                    </div>
+                        <div class="profile-section">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" th:value="${currentUser.email}">
+                        </div>
 
-                    <div id="validation-errors" class="alert alert-danger mt-3" role="alert" style="display: none;"></div>
+                        <div id="validation-errors" class="alert alert-danger mt-3" role="alert" style="display: none;"></div>
 
-                    <div class="d-flex justify-content-center mt-2">
-                        <button type="submit" class="btn btn-primary w-50 mt-4">Save</button>
-                    </div>
-                </form>
+                        <div class="d-flex justify-content-center mt-2">
+                            <button type="submit" class="btn btn-primary w-50 mt-4">Save</button>
+                        </div>
+                    </form>
+                </div>
+
             </div>
         </div>
 

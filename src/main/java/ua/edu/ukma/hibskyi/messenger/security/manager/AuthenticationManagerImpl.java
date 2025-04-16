@@ -26,6 +26,6 @@ public class AuthenticationManagerImpl implements AuthenticationManager {
         if (user.isEmpty() || !passwordEncoder.matches(authentication.getCredentials().toString(), user.get().getPasswordHash())) {
             throw new BadCredentialsException("Bad credentials");
         }
-        return new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), user.get().getPasswordHash());
+        return new UsernamePasswordAuthenticationToken(user.get().getId(), user.get().getPasswordHash());
     }
 }

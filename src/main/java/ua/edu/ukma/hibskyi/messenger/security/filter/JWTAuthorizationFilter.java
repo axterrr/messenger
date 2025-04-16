@@ -43,12 +43,12 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
         DecodedJWT jwt = jwtUtility.verifyToken(secretTokenCookie.get().getValue());
 
-        String username = jwt.getSubject();
+        String id = jwt.getSubject();
         List<GrantedAuthority> authorities = jwt.getClaim("roles").asList(String.class).stream()
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(id, null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);
     }

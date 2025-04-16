@@ -20,9 +20,9 @@ public class JWTUtility {
     @Value("${JWT_TOKEN_EXPIRATION_TIME}")
     private long expirationTime;
 
-    public String getToken(String username, Collection<? extends GrantedAuthority> authorities) {
+    public String getToken(String id, Collection<? extends GrantedAuthority> authorities) {
         return JWT.create()
-            .withSubject(username)
+            .withSubject(id)
             .withClaim("roles", authorities.stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList())

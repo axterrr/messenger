@@ -13,20 +13,20 @@ public class PageControllerExceptionHandler {
     public String handleBaseException(BaseException ex, Model model) {
         model.addAttribute("status", ex.getStatus());
         model.addAttribute("message", ex.getMessage());
-        return "error/error";
+        return "errors/error";
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
     public String handleNoResourceFoundException(NoResourceFoundException ex, Model model) {
         model.addAttribute("status", 404);
         model.addAttribute("message", "Resource not found: " + ex.getMessage());
-        return "error/error";
+        return "errors/error";
     }
 
     @ExceptionHandler(Exception.class)
     public String handleException(Exception ex, Model model) {
         model.addAttribute("status", 500);
         model.addAttribute("message", "Unexpected exception: " + ex.getMessage());
-        return "error/error";
+        return "errors/error";
     }
 }

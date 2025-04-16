@@ -16,16 +16,61 @@
              th:with="currentUser=${currentUser}, settingType='account'"></div>
 
         <div class="col-md-10 p-0 bg-white">
+            <div class="settings-body d-flex flex-column h-100">
 
-            <div class="setting-header">
-                <h4>Account</h4>
+                <div class="setting-header">
+                    <h4>Account</h4>
+                </div>
+
+                <div class="p-0 d-flex justify-content-center align-items-start bg-white settings-content">
+                    <div class="profile-card shadow-sm rounded-4 p-4 mt-4">
+
+                        <div class="profile-section">
+                            <h6 class="text-muted">Username</h6>
+                            <p th:text="${currentUser.username}"></p>
+                        </div>
+
+                        <div id="validation-errors" class="alert alert-danger mt-3" role="alert" style="display: none;"></div>
+                        <div th:if="${param.success}" class="alert alert-success mt-3 text-center p-2" role="alert">
+                            Password has been changed
+                        </div>
+
+                        <div class="d-flex justify-content-center">
+                            <button id="change-password-button" type="submit" class="btn btn-outline-primary w-50 mt-4 mb-4">Change password</button>
+                        </div>
+
+                        <form id="edit-password-form" hidden>
+                            <div class="profile-section">
+                                <label for="password" class="form-label">New Password</label>
+                                <input type="password" class="form-control" id="password" required/>
+                            </div>
+
+                            <div class="profile-section">
+                                <label for="confirm-password" class="form-label">Confirm password</label>
+                                <input type="password" class="form-control" id="confirm-password" required/>
+                            </div>
+
+                            <div class="d-flex justify-content-center mt-2">
+                                <button type="submit" class="btn btn-primary w-50 mt-4 mb-4">Save</button>
+                            </div>
+                        </form>
+
+                        <div class="d-flex flex-column justify-content-center align-items-center border-top">
+                            <button id="logout-button" class="btn btn-outline-danger w-50 mt-4">Log out</button>
+                            <button id="delete-account-button" class="d-block btn btn-danger w-50 mt-4">Delete account</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
-
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:inline="javascript">
+    const currentUserId = /*[[${currentUser?.id}]]*/ null;
+</script>
+<script src="/js/pages/account.js"></script>
 </body>
 </html>

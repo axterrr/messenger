@@ -8,6 +8,15 @@ html, body {
     height: 100vh;
 }
 
+.settings-body {
+    height: 100%;
+    max-height: 100vh;
+}
+
+.settings-content {
+    overflow-y: auto;
+}
+
 .setting-header {
     min-height: 60px;
     display: flex;
