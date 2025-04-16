@@ -3,13 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const messageBox = document.getElementById('messages');
         messageBox.scrollTop = messageBox.scrollHeight;
         document.getElementById("send-message-form-content").focus();
-        document.getElementById("send-message-form-content").addEventListener("keydown", function (event) {
-            if (event.key === "Enter" && !event.shiftKey) {
-                event.preventDefault();
-                document.getElementById("send-message-form").requestSubmit() ;
-            }
-        });
+        document.getElementById("send-message-form-content").addEventListener("keydown", onEnterClick);
         document.getElementById("send-message-form").addEventListener('submit', processSendFormSubmit);
+        document.querySelectorAll(".around-message").forEach(m => m.addEventListener('contextmenu', onContextMenu))
+        document.addEventListener('click', () => document.getElementById("message-context-menu")?.remove())
         connectToChatWebSocket();
     }
 });
@@ -83,11 +80,13 @@ function showMessage(message) {
 
     div.classList.add('message-wrapper', message.sender.id === currentUserId ? 'from-user' : 'from-other');
     div.innerHTML += `
-        <div class="message">
-            ${message.sender.id !== currentUserId ? `<span class="username">${escapeHtml(message.sender.name)}</span>` : ''}
-            <div>
-                <span>${escapeHtml(message.content)}</span>
-                <small class="text-muted d-block">${formatTime(message.sentAt)}</small>
+        <div class="around-message p-2">
+            <div class="message" id="${message.id}">
+                ${message.sender.id !== currentUserId ? `<span class="username">${escapeHtml(message.sender.name)}</span>` : ''}
+                <div>
+                    <span>${escapeHtml(message.content)}</span>
+                    <small class="text-muted d-block">${formatTime(message.sentAt)}</small>
+                </div>
             </div>
         </div>
     `;
@@ -104,4 +103,58 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.innerText = text;
     return div.innerHTML;
+}
+
+function onEnterClick(event) {
+    if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        document.getElementById("send-message-form").requestSubmit() ;
+    }
+}
+
+function onContextMenu(e) {
+    e.preventDefault();
+
+    document.getElementById("message-context-menu")?.remove()
+
+    let messageId = this.getElementsByClassName("message")[0].id
+    let isCurrentUserSender = this.parentElement.classList.contains("from-user");
+
+    let menu = document.createElement('div');
+    menu.id ='message-context-menu';
+    menu.className += "position-absolute bg-light border rounded p-1 shadow";
+    menu.style.zIndex = "1000";
+    menu.innerHTML = `
+        <div class="menu-item">Select</div>
+        ${isCurrentUserSender ? `<div class="menu-item" onclick="editMessage('${messageId}')">Edit</div>` : ""}
+        ${isCurrentUserSender ? `<div class="menu-item text-danger" onclick="deleteMessage('${messageId}')">Delete</div>` : ""}
+    `;
+    document.body.appendChild(menu);
+
+    const menuWidth = menu.offsetWidth;
+    const menuHeight = menu.offsetHeight;
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+
+    let x = e.pageX;
+    let y = e.pageY;
+
+    if (x + menuWidth > windowWidth) {
+        x = windowWidth - menuWidth - 10;
+    }
+
+    if (y + menuHeight > windowHeight) {
+        y = windowHeight - menuHeight - 10;
+    }
+
+    menu.style.left = `${x}px`;
+    menu.style.top = `${y}px`;
+}
+
+function editMessage(messageId) {
+    console.log("editing "+messageId)
+}
+
+function deleteMessage(messageId) {
+    console.log("deleting "+messageId)
 }

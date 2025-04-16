@@ -31,11 +31,13 @@
               <small th:text="${#temporals.year(message.sentAt) == #temporals.year(#temporals.createToday()) ? #temporals.format(message.sentAt, 'd MMMM') : #temporals.format(message.sentAt, 'd MMMM yyyy')}"></small>
             </div>
 
-            <div class="message">
-              <span th:if="${message.sender.username != currentUser.username}" class="username" th:text="${message.sender.name}"></span>
-              <div>
-                <span th:text="${message.content}"></span>
-                <small class="text-muted d-block" th:text="${#temporals.format(message.sentAt, 'HH:mm')}"></small>
+            <div class="around-message p-2">
+              <div class="message" th:id="${message.id}">
+                <span th:if="${message.sender.username != currentUser.username}" class="username" th:text="${message.sender.name}"></span>
+                <div>
+                  <span th:text="${message.content}"></span>
+                  <small class="text-muted d-block" th:text="${#temporals.format(message.sentAt, 'HH:mm')}"></small>
+                </div>
               </div>
             </div>
           </div>
