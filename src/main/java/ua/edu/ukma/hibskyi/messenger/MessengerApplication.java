@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 //  - WebSocket for updating/deleting and for chats
 //  - remake mappers
 //  - remake services
+//  - fix bug send websocket during transaction
 
 @SpringBootApplication
 public class MessengerApplication {

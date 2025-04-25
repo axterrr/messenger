@@ -50,4 +50,10 @@ public class ChatController {
         chatService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @DeleteMapping("/{id}/leave")
+    public ResponseEntity<HttpStatus> leaveChat(@PathVariable String id) {
+        chatService.leaveChat(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

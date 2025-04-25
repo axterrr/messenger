@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ua.edu.ukma.hibskyi.messenger.dto.view.ChatView;
 import ua.edu.ukma.hibskyi.messenger.entity.ChatEntity;
+import ua.edu.ukma.hibskyi.messenger.entity.UserEntity;
 import ua.edu.ukma.hibskyi.messenger.exception.ConflictException;
 import ua.edu.ukma.hibskyi.messenger.exception.ForbiddenException;
 import ua.edu.ukma.hibskyi.messenger.repository.UserRepository;
@@ -29,6 +30,15 @@ public class ChatValidator extends BaseValidatorImpl<ChatEntity, ChatView, Strin
 
         if (entity.getUsers().stream().anyMatch(u -> !userRepository.existsById(u.getId()))) {
             throw new ConflictException("Cannot add non existing users");
+        }
+    }
+
+    public void validateForLeave(ChatEntity chat, UserEntity user) {
+        if (!chat.getUsers().contains(user)) {
+            throw new ConflictException("User already isn't in the chat");
+        }
+        if (chat.getOwner() == user) {
+            throw new ConflictException("Owner cannot leave the chat");
         }
     }
 

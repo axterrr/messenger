@@ -190,7 +190,9 @@ function processRequest(request, onSuccess) {
 
 function onLeaveChatButtonClick() {
     if (!confirm("Are you sure you want to leave the chat?")) return;
-    console.log("leaving "+activeChatId)
+    processRequest(fetch(`/api/chat/${activeChatId}/leave`, {
+        method: 'DELETE'
+    }), () => window.location.href = "/");
 }
 
 function onDeleteChatButtonClick() {
