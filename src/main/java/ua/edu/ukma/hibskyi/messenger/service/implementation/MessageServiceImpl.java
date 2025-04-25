@@ -50,7 +50,7 @@ public class MessageServiceImpl extends BaseServiceImpl<MessageEntity, MessageVi
                 .build();
         }
         MessageResponse finalNewLastMessage = newLastMessage;
-        messagingTemplate.convertAndSend("/topic/chat/delete/" + chat.getId(), entity.getId());
+        messagingTemplate.convertAndSend("/topic/chat/delete-message/" + chat.getId(), entity.getId());
         chat.getUsers().forEach(user ->
             messagingTemplate.convertAndSend("/topic/user/update-last-message/" + user.getId(), finalNewLastMessage)
         );

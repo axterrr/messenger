@@ -14,6 +14,10 @@ function connectToUserWebSocket() {
             const message = JSON.parse(messageOutput.body);
             updateLastMessage(message);
         });
+        stompClient.subscribe('/topic/user/delete-chat/' + currentUserId, function (chatIdOutput) {
+            const chatId = chatIdOutput.body;
+            document.getElementById(chatId).remove();
+        });
     });
 }
 
@@ -22,7 +26,7 @@ function addChat(message) {
     let div = document.getElementById(chat.id);
     div.remove();
     div.innerHTML = `
-        <a class="${activeChatId === chat.id ? 'active' : ''} chat-link flex-column justify-content-around" href="/chat=${escapeHtml(chat.id)}">
+        <a class="${activeChatId === chat.id ? 'active' : ''} chat-link flex-column justify-content-around" href="/?chat=${escapeHtml(chat.id)}">
             <span class="chat-name fw-bold">${escapeHtml(chat.name)}</span>
             <small class="chat-preview text-muted">
                 ${escapeHtml((message.sender.id === currentUserId ? 'You: ' : message.sender.name + ': ') + message.content)}

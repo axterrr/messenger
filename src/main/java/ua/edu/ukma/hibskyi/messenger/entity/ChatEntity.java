@@ -1,5 +1,6 @@
 package ua.edu.ukma.hibskyi.messenger.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -57,7 +58,7 @@ public class ChatEntity implements Identifiable<String> {
     @EqualsAndHashCode.Exclude
     private MessageEntity lastMessage;
 
-    @OneToMany(mappedBy = "chat")
+    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
     @OrderBy("sentAt asc")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

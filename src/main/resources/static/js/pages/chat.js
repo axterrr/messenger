@@ -5,8 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("send-message-form-content").focus();
         document.getElementById("send-message-form-content").addEventListener("keydown", onEnterClick);
         document.getElementById("send-message-form").addEventListener('submit', processSendFormSubmit);
-        document.querySelectorAll(".around-message").forEach(m => m.addEventListener('contextmenu', onContextMenu))
-        document.addEventListener('click', () => document.getElementById("message-context-menu")?.remove())
+        document.querySelectorAll(".around-message").forEach(m => m.addEventListener('contextmenu', onContextMenu));
+        document.addEventListener('click', () => document.getElementById("message-context-menu")?.remove());
+        document.getElementById('leave-chat-button')?.addEventListener('click', onLeaveChatButtonClick);
+        document.getElementById('delete-chat-button')?.addEventListener('click', onDeleteChatButtonClick);
         connectToChatWebSocket();
     }
 });
@@ -38,9 +40,12 @@ function connectToChatWebSocket() {
             const message = JSON.parse(messageOutput.body);
             showMessage(message);
         });
-        stompClient.subscribe('/topic/chat/delete/' + activeChatId, function (messageOutput) {
+        stompClient.subscribe('/topic/chat/delete-message/' + activeChatId, function (messageOutput) {
             const messageId = messageOutput.body;
             removeMessage(messageId);
+        });
+        stompClient.subscribe('/topic/chat/delete/' + activeChatId, function () {
+            window.location.href = "/";
         });
     });
 }
@@ -165,7 +170,9 @@ function processRequest(request, onSuccess) {
             if (!response.ok) {
                 return response.json().then(error => { throw error })
             } else {
-                onSuccess();
+                if (onSuccess) {
+                    onSuccess();
+                }
             }
         })
         .catch(error => {
@@ -179,4 +186,16 @@ function processRequest(request, onSuccess) {
             });
             errorBox.style.display = 'block';
         });
+}
+
+function onLeaveChatButtonClick() {
+    if (!confirm("Are you sure you want to leave the chat?")) return;
+    console.log("leaving "+activeChatId)
+}
+
+function onDeleteChatButtonClick() {
+    if (!confirm("Are you sure you want to delete the chat for everyone? This action cannot be undone.")) return;
+    processRequest(fetch(`/api/chat/${activeChatId}`, {
+        method: 'DELETE'
+    }));
 }
