@@ -38,8 +38,13 @@ public class ChatValidator extends BaseValidatorImpl<ChatEntity, ChatView, Strin
             throw new ConflictException("User already isn't in the chat");
         }
         if (chat.getOwner() == user) {
-            throw new ConflictException("Owner cannot leave the chat");
+            throw new ConflictException("Owner cannot be deleted from his chat");
         }
+    }
+
+    public void validateForDeleteUserFromChat(ChatEntity chat, UserEntity user) {
+        validatePermissionForUpdate(chat);
+        validateForLeave(chat, user);
     }
 
     @Override

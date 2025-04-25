@@ -45,7 +45,7 @@ function connectToChatWebSocket() {
             const messageId = messageOutput.body;
             removeMessage(messageId);
         });
-        stompClient.subscribe('/topic/chat/delete/' + activeChatId, function () {
+        stompClient.subscribe(`/topic/chat/${activeChatId}/delete-user/${currentUserId}`, function () {
             window.location.href = "/";
         });
     });
@@ -253,9 +253,13 @@ function handleViewProfile(userId) {
 }
 
 function makeOwner(userId) {
+    if (!confirm("Are you sure you want to make the user owner of the chat? You will lost your status as owner.")) return;
     console.log("making owner "+userId)
 }
 
 function deleteUser(userId) {
-    console.log("deleting "+userId)
+    if (!confirm("Are you sure you want to delete the user from the chat?")) return;
+    processRequest(fetch(`/api/chat/${activeChatId}/users/${userId}`, {
+        method: 'DELETE',
+    }), () => document.getElementById(userId).remove());
 }

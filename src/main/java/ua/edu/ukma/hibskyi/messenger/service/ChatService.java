@@ -8,4 +8,6 @@ public interface ChatService extends BaseService<ChatView, ChatResponse, String>
     ChatResponse getByIdWithMessages(String id);
 
     void leaveChat(String chatId);
+
+    void deleteUserFromChat(String chatId, String userId);
 }

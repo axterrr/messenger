@@ -38,17 +38,28 @@ public class ChatServiceImpl extends BaseServiceImpl<ChatEntity, ChatView, ChatR
         ChatEntity chat = getEntity(chatId);
         String userId = authService.getAuthenticatedUserId();
         UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("User not found"));
+            .orElseThrow(() -> new NotFoundException("User not found"));
         chatValidator.validateForLeave(chat, user);
         chat.getUsers().remove(user);
     }
 
     @Override
+    public void deleteUserFromChat(String chatId, String userId) {
+        ChatEntity chat = getEntity(chatId);
+        UserEntity user = userRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundException("User not found"));
+        chatValidator.validateForDeleteUserFromChat(chat, user);
+        chat.getUsers().remove(user);
+        messagingTemplate.convertAndSend("/topic/chat/" + chatId + "/delete-user/" + userId, chatId);
+        messagingTemplate.convertAndSend("/topic/user/delete-chat/" + user.getId(), chat.getId());
+    }
+
+    @Override
     public void deleteById(String id) {
         ChatEntity entity = deleteEntity(id);
-        messagingTemplate.convertAndSend("/topic/chat/delete/" + id, id);
-        entity.getUsers().forEach(user ->
-            messagingTemplate.convertAndSend("/topic/user/delete-chat/" + user.getId(), id)
-        );
+        entity.getUsers().forEach(user -> {
+            messagingTemplate.convertAndSend("/topic/chat/" + id + "/delete-user/" + user.getId(), id);
+            messagingTemplate.convertAndSend("/topic/user/delete-chat/" + user.getId(), id);
+        });
     }
 }

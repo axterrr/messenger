@@ -56,4 +56,10 @@ public class ChatController {
         chatService.leaveChat(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @DeleteMapping("/{chatId}/users/{userId}")
+    public ResponseEntity<HttpStatus> deleteUserFromChat(@PathVariable String chatId, @PathVariable String userId) {
+        chatService.deleteUserFromChat(chatId, userId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
