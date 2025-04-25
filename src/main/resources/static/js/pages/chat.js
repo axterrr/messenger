@@ -201,3 +201,36 @@ function onDeleteChatButtonClick() {
         method: 'DELETE'
     }));
 }
+
+function handleUserClick(element) {
+    const user = {
+        name: element.dataset.name,
+        username: element.dataset.username,
+        phone: element.dataset.phone,
+        email: element.dataset.email,
+        description: element.dataset.description
+    };
+
+    document.getElementById('modalUserName').textContent = escapeHtml(user.name);
+    document.getElementById('modalUserUsername').textContent = escapeHtml(user.username);
+    document.getElementById('modalUserPhone').textContent = escapeHtml(user.phone);
+
+    const descSection = document.getElementById('modalUserDescriptionSection');
+    if (user.description?.trim()) {
+        document.getElementById('modalUserDescription').textContent = escapeHtml(user.description);
+        descSection.style.display = 'block';
+    } else {
+        descSection.style.display = 'none';
+    }
+
+    const emailSection = document.getElementById('modalUserEmailSection');
+    if (user.email?.trim()) {
+        document.getElementById('modalUserEmail').textContent = escapeHtml(user.email);
+        emailSection.style.display = 'block';
+    } else {
+        emailSection.style.display = 'none';
+    }
+
+    const modal = new bootstrap.Modal(document.getElementById('userProfileModal'));
+    modal.show();
+}
