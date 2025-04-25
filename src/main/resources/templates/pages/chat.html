@@ -80,16 +80,16 @@
       <div class="modal-body">
         <p><strong>Participants:</strong></p>
         <ul class="list-group overflow-auto" style="max-height: 250px;">
-          <li class="list-group-item d-flex justify-content-between align-items-center"
+          <li th:id="${user.id}" class="chat-participant list-group-item d-flex justify-content-between align-items-center"
               th:each="user : ${activeChat.users}"
               th:data-name = "${user.name}"
               th:data-username = "${user.username}"
               th:data-phone = "${user.phone}"
               th:data-email = "${user.email}"
               th:data-description = "${user.description}"
-              onclick="handleUserClick(this)">
+              onclick="handleViewProfile(this.id)">
             <span th:text="${user.name}"></span>
-            <span class="badge bg-primary rounded-pill"
+            <span id="owner-sigh" class="badge bg-primary rounded-pill"
                   th:if="${user.id == activeChat.owner.id}">Owner</span>
           </li>
         </ul>

@@ -5,10 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("send-message-form-content").focus();
         document.getElementById("send-message-form-content").addEventListener("keydown", onEnterClick);
         document.getElementById("send-message-form").addEventListener('submit', processSendFormSubmit);
-        document.querySelectorAll(".around-message").forEach(m => m.addEventListener('contextmenu', onContextMenu));
-        document.addEventListener('click', () => document.getElementById("message-context-menu")?.remove());
+        document.querySelectorAll(".around-message").forEach(m => m.addEventListener('contextmenu', onMessageContextMenu));
+        document.addEventListener('click', () => document.getElementById("context-menu")?.remove());
         document.getElementById('leave-chat-button')?.addEventListener('click', onLeaveChatButtonClick);
         document.getElementById('delete-chat-button')?.addEventListener('click', onDeleteChatButtonClick);
+        document.querySelectorAll(".chat-participant").forEach(p => p.addEventListener('contextmenu', onParticipantContextMenu));
         connectToChatWebSocket();
     }
 });
@@ -51,8 +52,8 @@ function connectToChatWebSocket() {
 }
 
 function showMessage(message) {
-    emptyChatPlacepolder = document.getElementById('empty-chat-placeholder');
-    if (emptyChatPlacepolder) emptyChatPlacepolder.hidden = true;
+    let emptyChatPlaceholder = document.getElementById('empty-chat-placeholder');
+    if (emptyChatPlaceholder) emptyChatPlaceholder.hidden = true;
 
     const messagesDiv = document.getElementById('messages');
     const div = document.createElement('div');
@@ -83,7 +84,7 @@ function showMessage(message) {
     `;
     messagesDiv.appendChild(div);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    div.getElementsByClassName("around-message")[0].addEventListener('contextmenu', onContextMenu);
+    div.getElementsByClassName("around-message")[0].addEventListener('contextmenu', onMessageContextMenu);
 }
 
 function formatTime(isoString) {
@@ -104,23 +105,38 @@ function onEnterClick(event) {
     }
 }
 
-function onContextMenu(e) {
-    e.preventDefault();
-
-    document.getElementById("message-context-menu")?.remove()
-
-    let messageId = this.getElementsByClassName("message")[0].id
-    let isCurrentUserSender = this.parentElement.classList.contains("from-user");
-
-    let menu = document.createElement('div');
-    menu.id ='message-context-menu';
-    menu.className += "position-absolute bg-light border rounded p-1 shadow";
-    menu.style.zIndex = "1000";
-    menu.innerHTML = `
+function onMessageContextMenu(e) {
+    const messageId = this.getElementsByClassName("message")[0].id
+    const isCurrentUserSender = this.parentElement.classList.contains("from-user");
+    const options = `
         <div class="menu-item">Select</div>
         ${isCurrentUserSender ? `<div class="menu-item" onclick="editMessage('${messageId}')">Edit</div>` : ""}
         ${isCurrentUserSender ? `<div class="menu-item text-danger" onclick="deleteMessage('${messageId}')">Delete</div>` : ""}
     `;
+    showContextMenu(e, options)
+}
+
+function onParticipantContextMenu(e) {
+    const userId = this.id;
+    const isCurrentUserOwner = document.getElementById("owner-sigh").parentElement.id === currentUserId
+    const options = `
+        <div class="menu-item" onclick="handleViewProfile('${userId}')">View</div>
+        ${(isCurrentUserOwner && userId !== currentUserId) ? `<div class="menu-item text-warning" onclick="makeOwner('${userId}')">Make Owner</div>` : ""}
+        ${(isCurrentUserOwner && userId !== currentUserId) ? `<div class="menu-item text-danger" onclick="deleteUser('${userId}')">Delete</div>` : ""}
+    `;
+    showContextMenu(e, options)
+}
+
+function showContextMenu(e, options) {
+    e.preventDefault()
+
+    document.getElementById("context-menu")?.remove()
+
+    let menu = document.createElement('div');
+    menu.id ='context-menu';
+    menu.className += "position-absolute bg-light border rounded p-1 shadow";
+    menu.style.zIndex = "10000";
+    menu.innerHTML = options;
     document.body.appendChild(menu);
 
     const menuWidth = menu.offsetWidth;
@@ -202,7 +218,8 @@ function onDeleteChatButtonClick() {
     }));
 }
 
-function handleUserClick(element) {
+function handleViewProfile(userId) {
+    const element = document.getElementById(userId);
     const user = {
         name: element.dataset.name,
         username: element.dataset.username,
@@ -233,4 +250,12 @@ function handleUserClick(element) {
 
     const modal = new bootstrap.Modal(document.getElementById('userProfileModal'));
     modal.show();
+}
+
+function makeOwner(userId) {
+    console.log("making owner "+userId)
+}
+
+function deleteUser(userId) {
+    console.log("deleting "+userId)
 }
