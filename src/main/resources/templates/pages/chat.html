@@ -32,7 +32,7 @@
 
         <div class="message-box" id="messages">
           <div th:each="message, iterStat : ${activeChat.messages}"
-               th:classappend="${message.sender.username == currentUser.username} ? 'message-wrapper from-user' : 'message-wrapper from-other'">
+               th:classappend="${message.sender?.username == currentUser.username} ? 'message-wrapper from-user' : 'message-wrapper from-other'">
 
             <div th:if="${iterStat.index == 0} or ${#temporals.format(message.sentAt, 'ddMMyyyy') != #temporals.format(activeChat.messages[iterStat.index - 1].sentAt, 'ddMMyyyy')}"
                  class="date-divider">
@@ -41,7 +41,7 @@
 
             <div class="around-message p-2">
               <div class="message" th:id="${message.id}">
-                <span th:if="${message.sender.username != currentUser.username}" class="username" th:text="${message.sender.name}"></span>
+                <span th:if="${message.sender?.username != currentUser.username}" class="username" th:text="${message.sender?.name != null ? message.sender.name : 'Unknown'}"></span>
                 <div>
                   <span th:text="${message.content}"></span>
                   <small class="text-muted d-block" th:text="${#temporals.format(message.sentAt, 'HH:mm')}"></small>
