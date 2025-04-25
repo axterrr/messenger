@@ -220,6 +220,8 @@ function onDeleteChatButtonClick() {
 
 function handleViewProfile(userId) {
     const element = document.getElementById(userId);
+    if (!element) return;
+
     const user = {
         name: element.dataset.name,
         username: element.dataset.username,

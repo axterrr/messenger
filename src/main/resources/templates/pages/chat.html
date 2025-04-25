@@ -41,7 +41,9 @@
 
             <div class="around-message p-2">
               <div class="message" th:id="${message.id}">
-                <span th:if="${message.sender?.username != currentUser.username}" class="username" th:text="${message.sender?.name != null ? message.sender.name : 'Unknown'}"></span>
+                <span th:if="${message.sender?.username != currentUser.username}" class="username"
+                      th:text="${message.sender?.name != null ? message.sender.name : 'Unknown'}"
+                      th:attr="onclick='handleViewProfile(\'' + ${message.sender?.id} + '\')'"></span>
                 <div>
                   <span th:text="${message.content}"></span>
                   <small class="text-muted d-block" th:text="${#temporals.format(message.sentAt, 'HH:mm')}"></small>
