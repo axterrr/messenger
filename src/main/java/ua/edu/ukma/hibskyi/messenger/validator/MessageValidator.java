@@ -46,7 +46,8 @@ public class MessageValidator extends BaseValidatorImpl<MessageEntity, MessageVi
 
     @Override
     protected void validatePermissionForDelete(MessageEntity entity) {
-        if (!entity.getSender().getId().equals(authService.getAuthenticatedUserId())) {
+        if (!entity.getSender().getId().equals(authService.getAuthenticatedUserId())
+            && !entity.getChat().getOwner().getId().equals(authService.getAuthenticatedUserId())) {
             throw new ForbiddenException();
         }
     }

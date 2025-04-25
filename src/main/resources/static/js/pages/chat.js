@@ -107,11 +107,12 @@ function onEnterClick(event) {
 
 function onMessageContextMenu(e) {
     const messageId = this.getElementsByClassName("message")[0].id
+    const isCurrentUserOwner = document.getElementById("owner-sigh").parentElement.id === currentUserId
     const isCurrentUserSender = this.parentElement.classList.contains("from-user");
     const options = `
         <div class="menu-item">Select</div>
         ${isCurrentUserSender ? `<div class="menu-item" onclick="editMessage('${messageId}')">Edit</div>` : ""}
-        ${isCurrentUserSender ? `<div class="menu-item text-danger" onclick="deleteMessage('${messageId}')">Delete</div>` : ""}
+        ${isCurrentUserSender || isCurrentUserOwner ? `<div class="menu-item text-danger" onclick="deleteMessage('${messageId}')">Delete</div>` : ""}
     `;
     showContextMenu(e, options)
 }
