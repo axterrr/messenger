@@ -55,6 +55,15 @@ public class ChatServiceImpl extends BaseServiceImpl<ChatEntity, ChatView, ChatR
     }
 
     @Override
+    public void changeOwner(String chatId, String userId) {
+        ChatEntity chat = getEntity(chatId);
+        UserEntity user = userRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundException("User not found"));
+        chatValidator.validateForChangingOwner(chat, user);
+        chat.setOwner(user);
+    }
+
+    @Override
     public void deleteById(String id) {
         ChatEntity entity = deleteEntity(id);
         entity.getUsers().forEach(user -> {

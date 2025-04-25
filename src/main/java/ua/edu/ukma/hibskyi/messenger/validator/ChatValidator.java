@@ -47,6 +47,16 @@ public class ChatValidator extends BaseValidatorImpl<ChatEntity, ChatView, Strin
         validateForLeave(chat, user);
     }
 
+    public void validateForChangingOwner(ChatEntity chat, UserEntity user) {
+        validatePermissionForUpdate(chat);
+        if (!chat.getUsers().contains(user)) {
+            throw new ConflictException("User must be in the chat to become its owner");
+        }
+        if (chat.getOwner() == user) {
+            throw new ConflictException("User is already chat owner");
+        }
+    }
+
     @Override
     protected void validatePermissionForView(ChatEntity entity) {
         String currentUserId = authService.getAuthenticatedUserId();

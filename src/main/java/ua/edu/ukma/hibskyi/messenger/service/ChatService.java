@@ -10,4 +10,6 @@ public interface ChatService extends BaseService<ChatView, ChatResponse, String>
     void leaveChat(String chatId);
 
     void deleteUserFromChat(String chatId, String userId);
+
+    void changeOwner(String chatId, String userId);
 }

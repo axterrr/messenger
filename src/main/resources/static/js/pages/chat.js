@@ -256,7 +256,10 @@ function handleViewProfile(userId) {
 
 function makeOwner(userId) {
     if (!confirm("Are you sure you want to make the user owner of the chat? You will lost your status as owner.")) return;
-    console.log("making owner "+userId)
+    processRequest(fetch(`/api/chat/${activeChatId}/owner`, {
+        method: 'PATCH',
+        body: userId,
+    }), () => window.location.reload());
 }
 
 function deleteUser(userId) {
