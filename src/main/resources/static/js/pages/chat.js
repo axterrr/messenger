@@ -110,7 +110,7 @@ function onMessageContextMenu(e) {
     const isCurrentUserOwner = document.getElementById("owner-sigh").parentElement.id === currentUserId
     const isCurrentUserSender = this.parentElement.classList.contains("from-user");
     const options = `
-        <div class="menu-item">Select</div>
+        <div class="menu-item" onclick="selectMessage('${messageId}')">Select</div>
         ${isCurrentUserSender ? `<div class="menu-item" onclick="editMessage('${messageId}')">Edit</div>` : ""}
         ${isCurrentUserSender || isCurrentUserOwner ? `<div class="menu-item text-danger" onclick="deleteMessage('${messageId}')">Delete</div>` : ""}
     `;
@@ -158,6 +158,10 @@ function showContextMenu(e, options) {
 
     menu.style.left = `${x}px`;
     menu.style.top = `${y}px`;
+}
+
+function selectMessage(messageId) {
+    console.log("selecting "+messageId)
 }
 
 function editMessage(messageId) {
@@ -216,7 +220,7 @@ function onDeleteChatButtonClick() {
     if (!confirm("Are you sure you want to delete the chat for everyone? This action cannot be undone.")) return;
     processRequest(fetch(`/api/chat/${activeChatId}`, {
         method: 'DELETE'
-    }));
+    }), () => window.location.href = "/");
 }
 
 function handleViewProfile(userId) {

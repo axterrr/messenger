@@ -1,0 +1,35 @@
+<div class="modal fade" id="userProfileModal" tabindex="-1" aria-labelledby="userProfileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-3">
+      <div class="modal-header">
+        <h5 class="modal-title" id="userProfileModalLabel">User Profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="profile-card shadow-sm rounded-4 p-4">
+          <h3 class="text-center" id="modalUserName"></h3>
+
+          <div class="profile-section" id="modalUserDescriptionSection" style="display: none;">
+            <h6 class="text-muted">About</h6>
+            <p id="modalUserDescription"></p>
+          </div>
+
+          <div class="profile-section">
+            <h6 class="text-muted">Username</h6>
+            <p id="modalUserUsername"></p>
+          </div>
+
+          <div class="profile-section">
+            <h6 class="text-muted">Phone</h6>
+            <p id="modalUserPhone"></p>
+          </div>
+
+          <div class="profile-section" id="modalUserEmailSection" style="display: none;">
+            <h6 class="text-muted">Email</h6>
+            <p id="modalUserEmail"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -20,8 +20,7 @@
   <div class="row chat-container shadow-lg">
 
     <div class="col-md-2 p-0"
-         th:insert="~{components/side-bar-chats.html}"
-         th:with="currentUser=${currentUser}, activeChat=${activeChat}"></div>
+         th:insert="~{components/side-bar-chats.html}"></div>
 
     <div class="col-md-10 p-0 bg-white">
       <div th:if="${activeChat != null}" class="chat-body d-flex flex-column h-100">
@@ -72,73 +71,8 @@
   </div>
 </div>
 
-<div th:if="${activeChat != null}" class="modal fade" id="chatInfoModal" tabindex="-1" aria-labelledby="chatInfoModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content shadow">
-      <div class="modal-header">
-        <h5 class="modal-title" id="chatInfoModalLabel" th:text="${activeChat.name}">Chat Name</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p><strong>Participants:</strong></p>
-        <ul class="list-group overflow-auto" style="max-height: 250px;">
-          <li th:id="${user.id}" class="chat-participant list-group-item d-flex justify-content-between align-items-center"
-              th:each="user : ${activeChat.users}"
-              th:data-name = "${user.name}"
-              th:data-username = "${user.username}"
-              th:data-phone = "${user.phone}"
-              th:data-email = "${user.email}"
-              th:data-description = "${user.description}"
-              onclick="handleViewProfile(this.id)">
-            <span th:text="${user.name}"></span>
-            <span id="owner-sigh" class="badge bg-primary rounded-pill"
-                  th:if="${user.id == activeChat.owner.id}">Owner</span>
-          </li>
-        </ul>
-      </div>
-      <div class="modal-footer justify-content-center">
-        <button th:if="${currentUser.id == activeChat.owner.id}" id="delete-chat-button" class="btn btn-danger w-50">Delete Chat</button>
-        <button th:if="${currentUser.id != activeChat.owner.id}" id="leave-chat-button" class="btn btn-outline-danger w-50">Leave Chat</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="userProfileModal" tabindex="-1" aria-labelledby="userProfileModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content p-3">
-      <div class="modal-header">
-        <h5 class="modal-title" id="userProfileModalLabel">User Profile</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="profile-card shadow-sm rounded-4 p-4">
-          <h3 class="text-center" id="modalUserName"></h3>
-
-          <div class="profile-section" id="modalUserDescriptionSection" style="display: none;">
-            <h6 class="text-muted">About</h6>
-            <p id="modalUserDescription"></p>
-          </div>
-
-          <div class="profile-section">
-            <h6 class="text-muted">Username</h6>
-            <p id="modalUserUsername"></p>
-          </div>
-
-          <div class="profile-section">
-            <h6 class="text-muted">Phone</h6>
-            <p id="modalUserPhone"></p>
-          </div>
-
-          <div class="profile-section" id="modalUserEmailSection" style="display: none;">
-            <h6 class="text-muted">Email</h6>
-            <p id="modalUserEmail"></p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<div th:insert="~{modal/chatModal}"></div>
+<div th:insert="~{modal/userModal}"></div>
 
 </body>
 </html>
