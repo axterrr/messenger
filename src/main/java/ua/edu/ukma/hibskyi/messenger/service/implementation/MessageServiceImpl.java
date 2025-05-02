@@ -1,9 +1,12 @@
 package ua.edu.ukma.hibskyi.messenger.service.implementation;
 
 import lombok.AllArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import ua.edu.ukma.hibskyi.messenger.dto.response.ChatResponse;
 import ua.edu.ukma.hibskyi.messenger.dto.response.MessageResponse;
 import ua.edu.ukma.hibskyi.messenger.dto.view.MessageView;
@@ -25,10 +28,17 @@ public class MessageServiceImpl extends BaseServiceImpl<MessageEntity, MessageVi
         entity.getChat().setLastMessage(entity);
 
         MessageResponse response = mapper.mapToResponse(entity);
-        messagingTemplate.convertAndSend("/topic/chat/" + view.getChatId(), response);
-        entity.getChat().getUsers().forEach(user ->
-            messagingTemplate.convertAndSend("/topic/user/" + user.getId(), response)
-        );
+        Hibernate.initialize(entity.getChat().getUsers());
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                messagingTemplate.convertAndSend("/topic/chat/" + view.getChatId(), response);
+                entity.getChat().getUsers().forEach(user ->
+                        messagingTemplate.convertAndSend("/topic/user/" + user.getId(), response)
+                );
+            }
+        });
+
         return entity.getId();
     }
 
@@ -50,9 +60,15 @@ public class MessageServiceImpl extends BaseServiceImpl<MessageEntity, MessageVi
                 .build();
         }
         MessageResponse finalNewLastMessage = newLastMessage;
-        messagingTemplate.convertAndSend("/topic/chat/delete-message/" + chat.getId(), entity.getId());
-        chat.getUsers().forEach(user ->
-            messagingTemplate.convertAndSend("/topic/user/update-last-message/" + user.getId(), finalNewLastMessage)
-        );
+        Hibernate.initialize(chat.getUsers());
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                messagingTemplate.convertAndSend("/topic/chat/delete-message/" + chat.getId(), entity.getId());
+                chat.getUsers().forEach(user ->
+                        messagingTemplate.convertAndSend("/topic/user/update-last-message/" + user.getId(), finalNewLastMessage)
+                );
+            }
+        });
     }
 }

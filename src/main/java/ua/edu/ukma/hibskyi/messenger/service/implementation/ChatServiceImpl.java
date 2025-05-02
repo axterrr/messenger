@@ -5,6 +5,8 @@ import org.hibernate.Hibernate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import ua.edu.ukma.hibskyi.messenger.dto.response.ChatResponse;
 import ua.edu.ukma.hibskyi.messenger.dto.view.ChatView;
 import ua.edu.ukma.hibskyi.messenger.entity.ChatEntity;
@@ -50,8 +52,14 @@ public class ChatServiceImpl extends BaseServiceImpl<ChatEntity, ChatView, ChatR
             .orElseThrow(() -> new NotFoundException("User not found"));
         chatValidator.validateForDeleteUserFromChat(chat, user);
         chat.getUsers().remove(user);
-        messagingTemplate.convertAndSend("/topic/chat/" + chatId + "/delete-user/" + userId, chatId);
-        messagingTemplate.convertAndSend("/topic/user/delete-chat/" + user.getId(), chat.getId());
+
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                messagingTemplate.convertAndSend("/topic/chat/" + chatId + "/delete-user/" + userId, chatId);
+                messagingTemplate.convertAndSend("/topic/user/delete-chat/" + user.getId(), chat.getId());
+            }
+        });
     }
 
     @Override
@@ -66,9 +74,16 @@ public class ChatServiceImpl extends BaseServiceImpl<ChatEntity, ChatView, ChatR
     @Override
     public void deleteById(String id) {
         ChatEntity entity = deleteEntity(id);
-        entity.getUsers().forEach(user -> {
-            messagingTemplate.convertAndSend("/topic/chat/" + id + "/delete-user/" + user.getId(), id);
-            messagingTemplate.convertAndSend("/topic/user/delete-chat/" + user.getId(), id);
+
+        Hibernate.initialize(entity.getUsers());
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                entity.getUsers().forEach(user -> {
+                    messagingTemplate.convertAndSend("/topic/chat/" + id + "/delete-user/" + user.getId(), id);
+                    messagingTemplate.convertAndSend("/topic/user/delete-chat/" + user.getId(), id);
+                });
+            }
         });
     }
 }
